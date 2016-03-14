@@ -1,4 +1,4 @@
-package com.fireimp_terraria.fireimp.datatypes;
+package net.fireimp.server.datatypes;
 
 public class SevenBitInt {
     private byte[] value;

@@ -1,4 +1,4 @@
-package com.fireimp_terraria.fireimp.datatypes.enums;
+package net.fireimp.server.datatypes.enums;
 
 /**
  * Imported from Terraria source

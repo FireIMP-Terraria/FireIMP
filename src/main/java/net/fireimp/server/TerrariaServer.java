@@ -1,4 +1,4 @@
-package com.fireimp_terraria.fireimp;
+package net.fireimp.server;
 
 public class TerrariaServer {
     public static void main(String[] args) {
