@@ -1,7 +1,6 @@
 package com.fireimp_terraria.fireimp.datatypes.enums;
 
 /**
- * Created by Dylan on 3/13/2016.
  * Details all possible in-game projectiles
  */
 @SuppressWarnings(value = "unused")

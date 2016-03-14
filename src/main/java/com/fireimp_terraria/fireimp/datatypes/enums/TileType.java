@@ -1,7 +1,6 @@
 package com.fireimp_terraria.fireimp.datatypes.enums;
 
 /**
- * Created by Dylan on 3/13/2016.
  * Imported from Terraria source
  * Details all tile types in game
  * TODO: Refactor this into a cleaner system?
@@ -357,5 +356,5 @@ public enum TileType {
     CHLOROPHYTE_BRICK,
     CRIMTANE_BRICK,
     SHROOMITE_PLATING,
-    MUSHROOM_STATUE;
+    MUSHROOM_STATUE
 }
