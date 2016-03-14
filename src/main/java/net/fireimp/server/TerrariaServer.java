@@ -1,7 +1,11 @@
 package net.fireimp.server;
 
+import net.fireimp.server.network.NetManager;
+
 public class TerrariaServer {
     public static void main(String[] args) {
-        //TODO: Actually make the server
+        NetManager netManager = new NetManager(25565);
+        netManager.start();
+        while(true);
     }
 }
