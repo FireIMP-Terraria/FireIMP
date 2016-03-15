@@ -16,4 +16,8 @@ public class SevenBitInt {
         bytes[idx++] = (byte)value;
         return new SevenBitInt(bytes);
     }
+
+    public byte[] getValue() {
+        return value;
+    }
 }
