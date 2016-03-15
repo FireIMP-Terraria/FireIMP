@@ -4,13 +4,11 @@ import net.fireimp.server.network.Codec;
 import net.fireimp.server.network.packets.NetworkPacket;
 import net.fireimp.server.network.packets.PacketType;
 
-public class PacketFinishLogin extends NetworkPacket {
-
-    public PacketFinishLogin() {
-        super(PacketType.CONTINUE_CONNECTING_RESPONSE);
+public class PacketCompleteConnection extends NetworkPacket {
+    public PacketCompleteConnection() {
+        super(PacketType.COMPLETE_CONNECTION);
     }
+    public void encode(Codec codec) {
 
-    @Override
-    public void decode(Codec codec) {
     }
 }

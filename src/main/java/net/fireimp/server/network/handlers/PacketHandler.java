@@ -3,9 +3,12 @@ package net.fireimp.server.network.handlers;
 import io.netty.channel.*;
 import net.fireimp.server.network.packets.NetworkPacket;
 import net.fireimp.server.network.packets.PacketType;
+import net.fireimp.server.network.packets.login.PacketCompleteConnection;
 import net.fireimp.server.network.packets.login.PacketConnectRequest;
 import net.fireimp.server.network.packets.login.PacketContinueConnecting;
-import net.fireimp.server.network.packets.login.PacketWorldInfo;
+import net.fireimp.server.network.packets.world.PacketRequestSection;
+import net.fireimp.server.network.packets.world.PacketSendSection;
+import net.fireimp.server.network.packets.world.PacketWorldInfo;
 import net.fireimp.server.network.player.PlayerConnection;
 
 import java.net.InetSocketAddress;
@@ -24,9 +27,16 @@ public class PacketHandler extends ChannelInboundHandlerAdapter {
         if(packet.getType() == PacketType.CONNECT_REQUEST) {
             System.out.println(((PacketConnectRequest)packet).getVersion());
             playerConnection.sendPacket(new PacketContinueConnecting(0));
-        } else if(packet.getType() == PacketType.COTNINUE_CONNECTING_RESPONSE) {
+        } else if(packet.getType() == PacketType.CONTINUE_CONNECTING_RESPONSE) {
             System.out.println("Creating fake world :o");
             playerConnection.sendPacket(new PacketWorldInfo());
+        } else if(packet.getType() == PacketType.REQUEST_SECTION) {
+//            playerConnection.sendPacket(new PacketSetStatus("Eating a penis..."));
+            playerConnection.sendPacket(new PacketSendSection());
+            PacketRequestSection requestSection = ((PacketRequestSection)packet);
+            if(requestSection.getXSection() == -1 && requestSection.getYSection() == -1) {
+                playerConnection.sendPacket(new PacketCompleteConnection());
+            }
         }
     }
 

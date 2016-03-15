@@ -98,6 +98,10 @@ public class Codec {
         buf.writeByte(value);
     }
 
+    public void writeBoolean(boolean value) {
+        buf.writeBoolean(value);
+    }
+
     public void write7BitInt(int value) {
         while(value > 0) {
             int bit = value & 0x7F; // get last 7 bits

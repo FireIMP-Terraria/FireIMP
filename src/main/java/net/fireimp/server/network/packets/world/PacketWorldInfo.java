@@ -1,5 +1,6 @@
-package net.fireimp.server.network.packets.login;
+package net.fireimp.server.network.packets.world;
 
+import net.fireimp.server.datatypes.WorldInfo;
 import net.fireimp.server.network.Codec;
 import net.fireimp.server.network.packets.NetworkPacket;
 import net.fireimp.server.network.packets.PacketType;
@@ -11,8 +12,9 @@ public class PacketWorldInfo extends NetworkPacket {
 
     @Override
     public void encode(Codec codec) {
-        codec.writeInt(24590); // time 0
-        codec.writeByte(0); // day bitflag
+        new WorldInfo("FireIMP Official test server").write(codec);
+  /*      codec.writeInt(14590); // time 0
+        codec.writeByte(1); // day bitflag
         codec.writeByte(7); // moon phase
         codec.writeShort(6400); //max tiles x
         codec.writeShort(1800); // max tiles z
@@ -56,6 +58,6 @@ public class PacketWorldInfo extends NetworkPacket {
         codec.writeByte(0x18);
         codec.writeByte(0);
         codec.writeByte(0);
-        codec.writeLong(0L);
+        codec.writeLong(0L);*/
     }
 }
