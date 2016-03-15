@@ -1,36 +1,42 @@
 package net.fireimp.server.network.handlers;
 
-import io.netty.channel.ChannelDuplexHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
+import io.netty.channel.*;
 import net.fireimp.server.network.packets.NetworkPacket;
+import net.fireimp.server.network.packets.PacketType;
+import net.fireimp.server.network.packets.login.PacketConnectRequest;
+import net.fireimp.server.network.packets.login.PacketContinueConnecting;
+import net.fireimp.server.network.player.PlayerConnection;
 
 import java.net.InetSocketAddress;
 
-public class PacketHandler extends ChannelDuplexHandler {
+public class PacketHandler extends ChannelInboundHandlerAdapter {
+    private final PlayerConnection playerConnection;
+
+    public PacketHandler(PlayerConnection playerConnection) {
+        this.playerConnection = playerConnection;
+    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         NetworkPacket packet = (NetworkPacket) msg;
-        int length = packet.getData().readableBytes();
-        System.out.println("Received packet with id " + packet.getId() + " and length " + length);
-    }
-
-    @Override
-    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        ctx.write(msg, promise);
+        System.out.println(packet.getType());
+        if(packet.getType() == PacketType.CONNECT_REQUEST) {
+            System.out.println(((PacketConnectRequest)packet).getVersion());
+            playerConnection.sendPacket(new PacketContinueConnecting(0));
+        }
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        playerConnection.setChannelHandlerContext(ctx);
         InetSocketAddress address = (InetSocketAddress)  ctx.channel().remoteAddress();
-        System.out.println(address.getAddress().getHostName() + " connected");
+        System.out.println(address.getAddress().toString() + " connected");
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         InetSocketAddress address = (InetSocketAddress)  ctx.channel().remoteAddress();
-        System.out.println(address.getAddress().getHostName() + " disconnected");
+        System.out.println(address.getAddress().toString() + " disconnected");
     }
 
     @Override

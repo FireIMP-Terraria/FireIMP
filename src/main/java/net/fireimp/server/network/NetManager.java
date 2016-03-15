@@ -12,6 +12,7 @@ import io.netty.util.concurrent.GenericFutureListener;
 import net.fireimp.server.network.handlers.PacketDecoder;
 import net.fireimp.server.network.handlers.PacketEncoder;
 import net.fireimp.server.network.handlers.PacketHandler;
+import net.fireimp.server.network.player.PlayerConnection;
 
 public class NetManager extends ChannelInitializer<SocketChannel> {
     private final int port;
@@ -48,6 +49,9 @@ public class NetManager extends ChannelInitializer<SocketChannel> {
 
     @Override
     protected void initChannel(SocketChannel channel) throws Exception {
-        channel.pipeline().addLast("encoder", new PacketEncoder()).addLast("decoder", new PacketDecoder()).addLast("packet_handler", new PacketHandler());
+        final PlayerConnection connection = new PlayerConnection();
+        channel.pipeline().addLast("encoder", new PacketEncoder())
+                .addLast("decoder", new PacketDecoder())
+                .addLast("packet_handler", new PacketHandler(connection));
     }
 }

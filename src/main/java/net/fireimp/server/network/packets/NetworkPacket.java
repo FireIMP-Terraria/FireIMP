@@ -1,21 +1,23 @@
 package net.fireimp.server.network.packets;
 
-import io.netty.buffer.ByteBuf;
+import net.fireimp.server.network.Codec;
 
 public class NetworkPacket {
-    private final int id;
-    private final ByteBuf data;
+    protected final PacketType type;
 
-    public NetworkPacket(byte id, ByteBuf data) {
-        this.id = id;
-        this.data = data;
+    public NetworkPacket(PacketType type) {
+        this.type = type;
     }
 
-    public int getId() {
-        return id;
+    public PacketType getType() {
+        return type;
     }
 
-    public ByteBuf getData() {
-        return data;
+    public void encode(Codec codec) {
+        throw new IllegalStateException("Tried to encode while no encoder is set!");
+    }
+
+    public void decode(Codec byf) {
+        throw new IllegalStateException("Tried to decode while no decoder is set!");
     }
 }
