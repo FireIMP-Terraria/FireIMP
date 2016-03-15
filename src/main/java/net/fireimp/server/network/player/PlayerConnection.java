@@ -13,4 +13,11 @@ public class PlayerConnection {
     public void sendPacket(NetworkPacket packet) {
         ctx.writeAndFlush(packet);
     }
+
+    public void sendPackets(NetworkPacket... packets) {
+        for(NetworkPacket packet : packets) {
+            ctx.write(packet);
+        }
+        ctx.flush();
+    }
 }
