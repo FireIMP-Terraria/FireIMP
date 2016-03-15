@@ -25,54 +25,82 @@ public class WorldInfo {
     /**
      * The current stage of the moon
      */
-    private byte moonPhase = 1;
+    private byte moonPhase = 0;
     private short maxTilesX =  8401;
     private short maxTilesY = 2401;
     /**
      * The x spawn location in tiles
      */
-    private short spawnX = 28167;
+    private short spawnX = 0; //Example: 28167
     /**
      * The y spawn location in tiles
      */
-    private short spawnY = 17420;
+    private short spawnY = 0; //Example: 17420
     /**
      * The layer the world defines as "surface". This means
      * surface mobs will spawn and a surface background will be used
      */
-    private short surfaceLayer = -17919;
+    private short surfaceLayer = 0; //Example: -17919
     /**
      * The layer the world defines as "caverns".
      * This means cavernous mobs will spawn and a cavern background will be used
      */
-    private short rockLayer = -15871;
-    private short worldId = (short) 1559098370;
+    private short rockLayer = 0; //Example: -15871
+    private short worldId = (short) 0; // Example: 1559098370
     /**
      * The name of this world
      */
-    private String worldName;
-    private byte moonType = 32;
-    private byte treeBackground = 0;
-    private byte corruptionBackground = 0;
-    private byte jungleBackground = 0;
-    private byte snowBackground = 0;
-    private byte hallowBackground = 0;
-    private byte crimsonBackground = 0;
-    private byte desertBackground = 0;
-    private byte oceanBackground = 0;
-    private byte iceBackstyle = 1;
-    private byte jungleBackstyle = 1;
-    private byte hellBackstyle = 2;
+    private String worldName; //Example: "World 1"
+    private byte moonType = 0; //Max: 32
+    private byte treeBackground = 0; //Max: 8
+    private byte corruptionBackground = 0; //Max: 8
+    private byte jungleBackground = 0; //Max: 8
+    private byte snowBackground = 0; //Max: 8
+    private byte hallowBackground = 0; //Max: 8
+    private byte crimsonBackground = 0; //Max: 8
+    private byte desertBackground = 0; //Max: 8
+    private byte oceanBackground = 0; //Max: 8
+    private byte iceBackstyle = 1; //Max: 6
+    private byte jungleBackstyle = 1; //Max: 6
+    private byte hellBackstyle = 2; //Max: 6
     private float windSpeed = 0f;
+    /**
+     * The number of clouds to spawn in the world
+     */
     private byte cloudNumber = (byte) 200;
-    private int treeOneX = 10;
-    private int treeTwoX = -10;
+    /**
+     * The X location of the first Living Wood
+     */
+    private int treeOneX = 0;
+    /**
+     * The X location of the second Living Wood
+     */
+    private int treeTwoX = 0;
+    /**
+     * The X location of the third Living Wood
+     */
     private int treeThreeX = 0;
-    private byte treeStyleOne = 1;
-    private byte treeStyleTwo = 2;
-    private byte treeStyleThree = 2;
+    /**
+     * The style of the first living wood
+     * @max 6
+     */
+    private byte treeStyleOne = 0;
+    /**
+     * The style of the second living wood
+     * @max 6
+     */
+    private byte treeStyleTwo = 0;
+    /**
+     * The style of the third living wood
+     * @max 6
+     */
+    private byte treeStyleThree = 0;
+    /**
+     * The style of the fourth living wood
+     * @max 6
+     */
     private byte treeStyleFour = 0;
-    private int caveBackOne = 200;
+    private int caveBackOne = 0; //Example: 200
     private int caveBackTwo = 200;
     private int caveBackThree = maxTilesX;
     private byte caveBackstyleOne = 3;
@@ -114,6 +142,9 @@ public class WorldInfo {
      * Unused, presumably for future content
      */
     private byte eventInfoFour;
+    /**
+     * The type of invasion currently ongoing
+     */
     private byte invasionType;
     private long lobbyId;
 
