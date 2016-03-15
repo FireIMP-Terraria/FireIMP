@@ -30,6 +30,8 @@ public class NetManager extends ChannelInitializer<SocketChannel> {
                     .channel(NioServerSocketChannel.class)
                     .childHandler(this)
                     .option(ChannelOption.SO_KEEPALIVE, true)
+                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)
+//                    .option(ChannelOption.SO_TIMEOUT, 60000)
                     .localAddress(port);
             bootstrap.bind().addListener(new GenericFutureListener<Future<? super Void>>() {
                 @Override

@@ -17,7 +17,7 @@ public class NetworkPacket {
         throw new IllegalStateException("Tried to encode while no encoder is set!");
     }
 
-    public void decode(Codec byf) {
+    public void decode(Codec codec) {
         throw new IllegalStateException("Tried to decode while no decoder is set!");
     }
 }

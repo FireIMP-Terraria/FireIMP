@@ -14,8 +14,16 @@ public class Codec {
         return buf.readLongLE();
     }
 
+    public double readDouble() {
+        return buf.readDouble();
+    }
+
     public int readInt() {
         return buf.readIntLE();
+    }
+
+    public float readFloat() {
+        return buf.readFloat();
     }
 
     public short readShort() {
@@ -54,12 +62,32 @@ public class Codec {
         return new String(bytes, Charsets.US_ASCII);
     }
 
+    public long readUnsignedInt() {
+        return buf.readUnsignedIntLE();
+    }
+
+    public int readUnsignedShort() {
+        return buf.readUnsignedShortLE();
+    }
+
+    public short readUnsignedByte() {
+        return buf.readUnsignedByte();
+    }
+
     public void writeLong(long value) {
         buf.writeLongLE(value);
     }
 
+    public void writeDouble(double value) {
+        buf.writeDouble(value);
+    }
+
     public void writeInt(int value) {
         buf.writeIntLE(value);
+    }
+
+    public void writeFloat(float value) {
+        buf.writeFloat(value);
     }
 
     public void writeShort(int value) {
