@@ -12,7 +12,7 @@ public class Bitflags {
     }
 
     private void setFlag(int mask) {
-        flags &= mask;
+        flags |= mask;
     }
 
     private void unsetFlag(int mask) {

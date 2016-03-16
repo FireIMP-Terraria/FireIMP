@@ -14,7 +14,7 @@ public class PacketSetStatus extends NetworkPacket {
         this.status = status;
     }
     public void encode(Codec codec) {
-        codec.writeByte(1);
+        codec.writeInt(0);
         codec.writeString(status);
     }
 

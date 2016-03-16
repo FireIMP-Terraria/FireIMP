@@ -26,7 +26,6 @@ public class PacketSendSection extends NetworkPacket {
     private Chests chests = new Chests();
     public PacketSendSection() {
         super(PacketType.SEND_SECTION);
-        tileSections.add(new TileSection(TileType.ADAMANTITE));
     }
 
     public void addTiles(TileSection... tileSections) {
@@ -61,5 +60,37 @@ public class PacketSendSection extends NetworkPacket {
         for(TileEntity entity : tileEntities) {
             entity.write(codec);
         }
+    }
+
+    public int getStartX() {
+        return xStart;
+    }
+
+    public void setStartX(int xStart) {
+        this.xStart = xStart;
+    }
+
+    public int getStartY() {
+        return yStart;
+    }
+
+    public void setStartY(int yStart) {
+        this.yStart = yStart;
+    }
+
+    public short getWidth() {
+        return width;
+    }
+
+    public void setWidth(short width) {
+        this.width = width;
+    }
+
+    public short getHeight() {
+        return height;
+    }
+
+    public void setHeight(short height) {
+        this.height = height;
     }
 }

@@ -47,7 +47,7 @@ public class TileSection implements StreamObject {
      * 128 = ExtraRepeatValue
      */
     private Bitflags byteThree = new Bitflags();
-    private boolean isActive;
+    private boolean isActive = true;
     private boolean isWall;
     private boolean isLiquidPresent;
     private boolean isLavaPresent;
@@ -95,15 +95,21 @@ public class TileSection implements StreamObject {
     public void write(Codec codec) {
         updateFlags();
         codec.writeByte(byteOne.getValue());
-        codec.writeByte(byteTwo.getValue());
-        codec.writeByte(byteThree.getValue());
+        if(byteTwo.getValue() != 0) {
+            codec.writeByte(byteTwo.getValue());
+        }
+        if(byteTwo.getValue() != 0) {
+            codec.writeByte(byteThree.getValue());
+        }
         if(isActive) {
             if(isShort) {
                 codec.writeShort(getType().ordinal());
             } else {
                 codec.writeByte(getType().ordinal());
             }
-        }
+//            codec.writeShort(1);
+//            codec.writeShort(1);
+        };
         //TODO: Implement frame importance
         if(isColored) {
             codec.writeByte(color);
@@ -122,6 +128,8 @@ public class TileSection implements StreamObject {
             }
         } else if(isLavaPresent) {
             codec.writeByte(Liquid.LAVA.ordinal());
+        } else {
+//            codec.writeByte(0);
         }
         if(hasWireOne) {
             codec.writeByte(1);
@@ -129,7 +137,7 @@ public class TileSection implements StreamObject {
         if(hasWireTwo) {
             codec.writeByte(1);
         }
-        if(hasWireThree) {
+        if(hasWireTwo) {
             codec.writeByte(1);
         }
         if(repeatValuePresent) {
