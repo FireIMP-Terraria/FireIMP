@@ -2,6 +2,7 @@ package net.fireimp.server.world.generator.passes;
 
 import net.fireimp.server.util.Maths;
 import net.fireimp.server.world.World;
+import net.fireimp.server.world.WorldInfo;
 import net.fireimp.server.world.WorldSize;
 
 public class TerrainPass extends GenerationPass {
@@ -31,9 +32,18 @@ public class TerrainPass extends GenerationPass {
         double rockLayerLow = rockLayer;
         double rockLayerHigh = rockLayer;
 
+        int spawnX = size.getWidth() / 2;
+        int spawnY = 0;
+
+        long nextProgressUpdate = 0L;
+
         // Loop through each column of blocks
-        for(int x = 0; x < size.getTileCount(); x++) {
+        for(int x = 0; x < size.getWidth(); x++) {
             float progress = x / (float) size.getWidth(); // TODO: Show progress in log
+            if(nextProgressUpdate < System.currentTimeMillis()) {
+                System.out.println(((int) (progress * 100)) + "%");
+                nextProgressUpdate = System.currentTimeMillis() + 1000L;
+            }
 
             // adjust surface level bounds
             if(worldSurface < worldSurfaceLow) {
@@ -78,9 +88,21 @@ public class TerrainPass extends GenerationPass {
                     world.getTileAt(x, y).setTileId(1);
                 }
             }
+
+            if(x == spawnX) {
+                spawnY = (int) (worldSurface - 1);
+            }
         }
 
-        // TODO: Set world info
+        WorldInfo info = world.getWorldInfo();
+        info.setMaxTilesX(size.getWidth());
+        info.setMaxTilesY(size.getHeight());
+        info.setSurfaceLayer((int) (worldSurfaceHigh + 25.0));
+        info.setRockLayer((int) (info.getSurfaceLayer() + ((int) (rockLayerHigh - worldSurface) / 6.0) * 6));
+        info.setSpawnX(spawnX);
+        info.setSpawnY(spawnY);
+        System.out.println(spawnX + " " + spawnY);
+        // TODO: Set water level
     }
 
     private double tranformRockLevel(double rockLayer, double worldSurface, WorldSize size) {

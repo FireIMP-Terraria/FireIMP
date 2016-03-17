@@ -1,96 +1,124 @@
 package net.fireimp.server.network.packets.world;
 
-import net.fireimp.server.datatypes.Vec2i;
-import net.fireimp.server.datatypes.enums.TileType;
-import net.fireimp.server.datatypes.tiles.Chests;
-import net.fireimp.server.datatypes.tiles.Sign;
-import net.fireimp.server.datatypes.tiles.TileEntity;
-import net.fireimp.server.datatypes.tiles.TileSection;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.fireimp.server.network.Codec;
 import net.fireimp.server.network.packets.NetworkPacket;
 import net.fireimp.server.network.packets.PacketType;
+import net.fireimp.server.world.Tile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.zip.Deflater;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.Inflater;
 
 public class PacketSendSection extends NetworkPacket {
-    private boolean compressed;
+    private boolean compressed = false;
     private int xStart;
     private int yStart;
-    private short width;
-    private short height;
-    private List<TileSection> tileSections = new ArrayList<>();
-    private List<Sign> signs = new ArrayList<>();
-    private List<TileEntity> tileEntities = new ArrayList<>();
-    private Chests chests = new Chests();
+    private int width;
+    private int height;
+    private Tile[] tiles;
+
     public PacketSendSection() {
         super(PacketType.SEND_SECTION);
     }
 
-    public void addTiles(TileSection... tileSections) {
-        this.tileSections.addAll(Arrays.asList(tileSections));
+    public PacketSendSection(int xStart, int yStart, int width, int height, Tile[] tiles) {
+        this(xStart, yStart, width, height, tiles, true); // compress by default
     }
 
-    public void addSigns(Sign... signs) {
-        this.signs.addAll(Arrays.asList(signs));
-    }
-    public void addChests(Vec2i... chests) {
-        this.chests.addChests(chests);
+    public PacketSendSection(int xStart, int yStart, int width, int height, Tile[] tiles, boolean compressed) {
+        this();
+        this.xStart = xStart;
+        this.yStart = yStart;
+        this.width = width;
+        this.height = height;
+        this.tiles = tiles;
+        this.compressed = compressed;
     }
 
     @Override
     public void encode(Codec codec) {
+        // Compression
+        Codec originalCodec = codec;
         codec.writeBoolean(compressed);
+        if(compressed) {
+            codec = codec.newCodec();
+        }
+
+        // Write data
         codec.writeInt(xStart);
         codec.writeInt(yStart);
         codec.writeShort(width);
         codec.writeShort(height);
-        for(TileSection tileSection : tileSections) {
-            tileSection.write(codec);
+        for(int i = 0; i < tiles.length; i++) {
+            int successive = 0;
+            while(tiles[i + ++successive].equals(tiles[i]) && successive < Short.MAX_VALUE);
+            tiles[i].encode(codec, successive - 1);
+            i += successive - 1; // Skip tiles if successive
         }
-        chests.write(codec);
-        int index = 0;
-        codec.writeShort(signs.size());
-        for(Sign sign : signs) {
-            sign.setIndex(index++);
-            sign.write(codec);
+        codec.writeShort(0); // no chests
+        codec.writeShort(0); // no signs
+        codec.writeShort(0); // no tile entities
+
+        // Compression
+        if(compressed) {
+            byte[] uncompressed = codec.toByteArray(true);
+            Deflater deflater = new Deflater();
+            deflater.setInput(uncompressed);
+
+            // Deflate (compress)
+            byte[] buffer = new byte[1024];
+            while(!deflater.finished()) {
+                int length = deflater.deflate(buffer);
+                originalCodec.writeBytes(buffer, 0, length);
+            }
         }
-        codec.writeShort(tileEntities.size());
-        for(TileEntity entity : tileEntities) {
-            entity.write(codec);
+    }
+
+    @Override
+    public void decode(Codec codec) {
+        this.compressed = codec.readBoolean();
+        if(compressed) {
+            try {
+                // Read remaining data
+                byte[] data = new byte[codec.readableBytes()];
+                codec.readBytes(data);
+
+                // Create inflater
+                Inflater inflater = new Inflater(true);
+                inflater.setInput(data);
+
+                // Write to buffer
+                ByteBuf buf = Unpooled.buffer();
+                byte[] buffer = new byte[1024];
+                while(!inflater.finished()) {
+                    int length = inflater.inflate(buffer);
+                    buf.writeBytes(buffer, 0, length);
+                }
+
+                codec = new Codec(buf);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
+        this.xStart = codec.readInt();
+        this.yStart = codec.readInt();
+        this.width = codec.readShort();
+        this.height = codec.readShort();
     }
 
-    public int getStartX() {
-        return xStart;
-    }
-
-    public void setStartX(int xStart) {
-        this.xStart = xStart;
-    }
-
-    public int getStartY() {
-        return yStart;
-    }
-
-    public void setStartY(int yStart) {
-        this.yStart = yStart;
-    }
-
-    public short getWidth() {
-        return width;
-    }
-
-    public void setWidth(short width) {
-        this.width = width;
-    }
-
-    public short getHeight() {
-        return height;
-    }
-
-    public void setHeight(short height) {
-        this.height = height;
+    @Override
+    public String toString() {
+        return "PacketSendSection{" +
+                "compressed=" + compressed +
+                ", xStart=" + xStart +
+                ", yStart=" + yStart +
+                ", width=" + width +
+                ", height=" + height +
+                '}';
     }
 }

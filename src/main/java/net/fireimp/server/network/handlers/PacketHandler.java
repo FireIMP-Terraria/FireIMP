@@ -1,26 +1,28 @@
 package net.fireimp.server.network.handlers;
 
 import io.netty.channel.*;
-import net.fireimp.server.datatypes.enums.TileType;
-import net.fireimp.server.datatypes.tiles.TileSection;
 import net.fireimp.server.network.packets.NetworkPacket;
 import net.fireimp.server.network.packets.PacketType;
 import net.fireimp.server.network.packets.login.PacketCompleteConnection;
 import net.fireimp.server.network.packets.login.PacketConnectRequest;
 import net.fireimp.server.network.packets.login.PacketContinueConnecting;
-import net.fireimp.server.network.packets.login.PacketSetStatus;
 import net.fireimp.server.network.packets.world.PacketRequestSection;
 import net.fireimp.server.network.packets.world.PacketSendSection;
 import net.fireimp.server.network.packets.world.PacketWorldInfo;
 import net.fireimp.server.network.player.PlayerConnection;
+import net.fireimp.server.world.Tile;
+import net.fireimp.server.world.World;
+import net.fireimp.server.world.WorldSize;
 
 import java.net.InetSocketAddress;
 
 public class PacketHandler extends ChannelInboundHandlerAdapter {
     private final PlayerConnection playerConnection;
+    private final World world;
 
-    public PacketHandler(PlayerConnection playerConnection) {
+    public PacketHandler(PlayerConnection playerConnection, World world) {
         this.playerConnection = playerConnection;
+        this.world = world;
     }
 
     @Override
@@ -32,23 +34,27 @@ public class PacketHandler extends ChannelInboundHandlerAdapter {
             playerConnection.sendPacket(new PacketContinueConnecting(0));
         } else if(packet.getType() == PacketType.CONTINUE_CONNECTING_RESPONSE) {
             System.out.println("Creating fake world :o");
-            playerConnection.sendPacket(new PacketWorldInfo());
+            playerConnection.sendPacket(new PacketWorldInfo(world.getWorldInfo()));
         } else if(packet.getType() == PacketType.REQUEST_SECTION) {
             PacketRequestSection requestSection = ((PacketRequestSection)packet);
 
             if(requestSection.getXSection() == -1 && requestSection.getYSection() == -1) {
                 //Banner trick:
 //                playerConnection.sendPacket(new PacketSetStatus("You are playing on a FireIMP Server!                                                                  "));
+                int startX = world.getWorldInfo().getSpawnX() - 100;
+                int startY = world.getWorldInfo().getSpawnY() - 75;
+                int width = 200;
+                int height = 150;
+                Tile[] tiles = new Tile[width * height];
+                int idx = 0;
+                for(int x = 0; x < 200; x++) {
+                    for(int y = 0; y < 150; y++) {
+                        tiles[idx++] = world.getTileAt(x, y);
+                    }
+                }
+                PacketSendSection section = new PacketSendSection(startX, startY, width, height, tiles);
+                playerConnection.sendPacket(section);
                 playerConnection.sendPacket(new PacketCompleteConnection());
-
-                PacketSendSection sendSection = new PacketSendSection();
-                sendSection.setStartX(3200);
-                sendSection.setStartY(320);
-                sendSection.setWidth((short) 50);
-                sendSection.setHeight((short) 500);
-                sendSection.addTiles(new TileSection(TileType.SNOW_BLOCK, (short) (2500)));
-                playerConnection.sendPacket(sendSection);
-            } else {
             }
         }
     }

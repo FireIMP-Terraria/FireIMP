@@ -1,9 +1,7 @@
-package net.fireimp.server.datatypes;
+package net.fireimp.server.world;
 
-import io.netty.buffer.ByteBuf;
 import net.fireimp.server.network.Codec;
-
-import java.nio.charset.Charset;
+import net.fireimp.server.util.BitFlags;
 
 /**
  * Stores metadata about a world instance
@@ -27,27 +25,27 @@ public class WorldInfo {
      * The current stage of the moon
      */
     private byte moonPhase = 7;
-    private short maxTilesX =  6400;
-    private short maxTilesY = 1800;
+    private int maxTilesX =  6400;
+    private int maxTilesY = 1800;
     /**
      * The x spawn location in tiles
      */
-    private short spawnX = 3200; //Example: 3200
+    private int spawnX = 3200; //Example: 3200
     /**
      * The y spawn location in tiles
      */
-    private short spawnY = 320; //Example: 320
+    private int spawnY = 320; //Example: 320
     /**
      * The layer the world defines as "surface". This means
      * surface mobs will spawn and a surface background will be used
      */
-    private short surfaceLayer = 465; //Example: 465
+    private int surfaceLayer = 465; //Example: 465
     /**
      * The layer the world defines as "caverns".
      * This means cavernous mobs will spawn and a cavern background will be used
      */
-    private short rockLayer = 729; //Example: 729
-    private int worldId = (short) 1559098370; // Example: 1559098370
+    private int rockLayer = 729; //Example: 729
+    private int worldId = (int) 1559098370; // Example: 1559098370
     /**
      * The name of this world
      */
@@ -121,7 +119,7 @@ public class WorldInfo {
      * 64 - Server Side Characters enabled
      * 128 - Plantera killed
      */
-    private byte eventInfo;
+    private BitFlags eventInfo = new BitFlags();
     /**
      * Describes events that have occurred in this world
      * Bitflags:
@@ -134,7 +132,7 @@ public class WorldInfo {
      * 64 - Pumpkin moon
      * 128 - Snow moon
      */
-    private byte eventInfoTwo;
+    private BitFlags eventInfoTwo = new BitFlags();
     /**
      * Unused, presumably for future content
      */
@@ -194,8 +192,8 @@ public class WorldInfo {
         codec.writeByte(caveBackstyleThree);
         codec.writeByte(caveBackstyleFour);
         codec.writeFloat(rain);
-        codec.writeByte(eventInfo);
-        codec.writeByte(eventInfoTwo);
+        codec.writeByte(eventInfo.getValue());
+        codec.writeByte(eventInfoTwo.getValue());
         codec.writeByte(eventInfoThree);
         codec.writeByte(eventInfoFour);
         codec.writeByte(invasionType);
@@ -226,51 +224,51 @@ public class WorldInfo {
         this.moonPhase = moonPhase;
     }
 
-    public short getMaxTilesX() {
+    public int getMaxTilesX() {
         return maxTilesX;
     }
 
-    public void setMaxTilesX(short maxTilesX) {
+    public void setMaxTilesX(int maxTilesX) {
         this.maxTilesX = maxTilesX;
     }
 
-    public short getMaxTilesY() {
+    public int getMaxTilesY() {
         return maxTilesY;
     }
 
-    public void setMaxTilesY(short maxTilesY) {
+    public void setMaxTilesY(int maxTilesY) {
         this.maxTilesY = maxTilesY;
     }
 
-    public short getSpawnX() {
+    public int getSpawnX() {
         return spawnX;
     }
 
-    public void setSpawnX(short spawnX) {
+    public void setSpawnX(int spawnX) {
         this.spawnX = spawnX;
     }
 
-    public short getSpawnY() {
+    public int getSpawnY() {
         return spawnY;
     }
 
-    public void setSpawnY(short spawnY) {
+    public void setSpawnY(int spawnY) {
         this.spawnY = spawnY;
     }
 
-    public short getSurfaceLayer() {
+    public int getSurfaceLayer() {
         return surfaceLayer;
     }
 
-    public void setSurfaceLayer(short surfaceLayer) {
+    public void setSurfaceLayer(int surfaceLayer) {
         this.surfaceLayer = surfaceLayer;
     }
 
-    public short getRockLayer() {
+    public int getRockLayer() {
         return rockLayer;
     }
 
-    public void setRockLayer(short rockLayer) {
+    public void setRockLayer(int rockLayer) {
         this.rockLayer = rockLayer;
     }
 
@@ -522,20 +520,12 @@ public class WorldInfo {
         this.rain = rain;
     }
 
-    public byte getEventInfo() {
+    public BitFlags getEventInfo() {
         return eventInfo;
     }
 
-    public void setEventInfo(byte eventInfo) {
-        this.eventInfo = eventInfo;
-    }
-
-    public byte getEventInfoTwo() {
+    public BitFlags getEventInfoTwo() {
         return eventInfoTwo;
-    }
-
-    public void setEventInfoTwo(byte eventInfoTwo) {
-        this.eventInfoTwo = eventInfoTwo;
     }
 
     public byte getEventInfoThree() {

@@ -9,10 +9,13 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.fireimp.server.TerrariaServer;
 import net.fireimp.server.network.handlers.PacketDecoder;
 import net.fireimp.server.network.handlers.PacketEncoder;
 import net.fireimp.server.network.handlers.PacketHandler;
 import net.fireimp.server.network.player.PlayerConnection;
+import net.fireimp.server.world.World;
+import net.fireimp.server.world.WorldSize;
 
 public class NetManager extends ChannelInitializer<SocketChannel> {
     private final int port;
@@ -54,6 +57,6 @@ public class NetManager extends ChannelInitializer<SocketChannel> {
         final PlayerConnection connection = new PlayerConnection();
         channel.pipeline().addLast("encoder", new PacketEncoder())
                 .addLast("decoder", new PacketDecoder())
-                .addLast("packet_handler", new PacketHandler(connection));
+                .addLast("packet_handler", new PacketHandler(connection, TerrariaServer.world));
     }
 }

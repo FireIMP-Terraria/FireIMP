@@ -117,4 +117,26 @@ public class Codec {
         write7BitInt(value.length());
         buf.writeBytes(value.getBytes(Charsets.US_ASCII));
     }
+
+    public void writeBytes(byte[] bytes, int start, int length) {
+        buf.writeBytes(bytes, start, length);
+    }
+
+    public int readableBytes() {
+        return buf.readableBytes();
+    }
+
+    public Codec newCodec() {
+        return new Codec(buf.alloc().buffer());
+    }
+
+    public byte[] toByteArray(boolean release) {
+        buf.readerIndex(0);
+        byte[] buffer = new byte[buf.readableBytes()];
+        buf.readBytes(buffer);
+        if(release) {
+            buf.release();
+        }
+        return buffer;
+    }
 }
