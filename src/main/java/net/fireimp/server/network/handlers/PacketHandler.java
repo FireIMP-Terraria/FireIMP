@@ -47,9 +47,9 @@ public class PacketHandler extends ChannelInboundHandlerAdapter {
                 int height = 150;
                 Tile[] tiles = new Tile[width * height];
                 int idx = 0;
-                for(int x = 1; x < 200; x++) {
-                    for(int y = 1; y < 150; y++) {
-                        tiles[idx++] = world.getTileAt(x, y);
+                for(int x = 0; x < 200; x++) {
+                    for(int y = 0; y < 150; y++) {
+                        tiles[idx++] = world.getTileAt(startX + x, startY + y);
                     }
                 }
                 PacketSendSection section = new PacketSendSection(startX, startY, width, height, tiles);

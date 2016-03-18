@@ -6,7 +6,7 @@ import net.fireimp.server.util.BitFlags;
 public class Tile {
     private final short x;
     private final short y;
-    private int type;
+    private int type = -1;
 
     private final BitFlags flags1 = new BitFlags();
     private final BitFlags flags2 = new BitFlags();
@@ -26,16 +26,19 @@ public class Tile {
         return y;
     }
 
+    public int getTypeId() {
+        return type;
+    }
+
     public void setTileId(int id) {
         this.type = id;
         boolean isShort = id >>> 8 != 0;
         flags1.setMask(32, isShort);
+        boolean active = id >= 0;
+        flags1.setMask(2, active);
     }
 
     public void encode(Codec codec, int repeat) {
-        // Apply repeat count
-        if(repeat > 0) flags1.set(64);
-        if((repeat & 0xFF00) != 0) flags1.set(128);
         // Send flags
         codec.writeByte(flags1.getValue());
         if(flags1.get(1) || flags2.get(1)) {
@@ -45,6 +48,14 @@ public class Tile {
         if(flags2.get(1)) {
             codec.writeByte(flags3.getValue());
         }
+        if(type < 0) {
+            // inactive block
+            return;
+        }
+
+        // Apply repeat count
+        if(repeat > 0) flags1.set(64);
+        if((repeat & 0xFF00) != 0) flags1.set(128);
 
         // Send type
         if(flags1.get(32)) {
