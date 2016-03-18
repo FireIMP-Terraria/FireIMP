@@ -9,7 +9,7 @@ public class TerrariaServer {
 
     public static void main(String[] args) {
 //        new RawPacketSystem().run();
-        world = new World(WorldSize.MEDIUM);
+        world = new World(WorldSize.SMALL);
         world.generate();
 
         NetManager netManager = new NetManager(25565);

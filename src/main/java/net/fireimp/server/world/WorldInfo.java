@@ -101,7 +101,7 @@ public class WorldInfo {
     private byte treeStyleFour = 0;
     private int caveBackOne = 3123; //Example: 3123
     private int caveBackTwo = 3270;
-    private int caveBackThree = maxTilesX;
+    private int caveBackThree = 5000;
     private byte caveBackstyleOne = 6;
     private byte caveBackstyleTwo = 0;
     private byte caveBackstyleThree = 3;

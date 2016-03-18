@@ -15,6 +15,7 @@ public class Tile {
     public Tile(short x, short y) {
         this.x = x;
         this.y = y;
+        flags1.setMask(2, true);
     }
 
     public short getX() {
