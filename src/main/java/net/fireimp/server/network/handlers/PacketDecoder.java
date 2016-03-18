@@ -19,6 +19,12 @@ public class PacketDecoder extends ByteToMessageDecoder {
         }
 
         short length = input.readShortLE();
+        if(input.readableBytes() < length-2) {
+            // Apparently, there's more data coming
+            input.readerIndex(input.readerIndex()-2);
+            return;
+        }
+
         byte id = input.readByte();
         ByteBuf data = ctx.alloc().buffer(length  - 3);
         input.readBytes(data);
