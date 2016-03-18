@@ -8,14 +8,14 @@ public class Tile {
     private final short y;
     private int type = -1;
 
-    private final BitFlags flags1 = new BitFlags();
-    private final BitFlags flags2 = new BitFlags();
-    private final BitFlags flags3 = new BitFlags();
+    private byte flags1 = 0;
+    private byte flags2 = 0;
+    private byte flags3 = 0;
 
     public Tile(short x, short y) {
         this.x = x;
         this.y = y;
-        flags1.setMask(2, true);
+//        flags1.setMask(2, true);
     }
 
     public short getX() {
@@ -33,20 +33,20 @@ public class Tile {
     public void setTileId(int id) {
         this.type = id;
         boolean isShort = id >>> 8 != 0;
-        flags1.setMask(32, isShort);
+        if(isShort) flags1 |= 32;
         boolean active = id >= 0;
-        flags1.setMask(2, active);
+        if(active) flags1 |= 2;
     }
 
     public void encode(Codec codec, int repeat) {
         // Send flags
-        codec.writeByte(flags1.getValue());
-        if(flags1.get(1) || flags2.get(1)) {
+        codec.writeByte(flags1);
+        if((flags1 & 1) != 0 || (flags2 & 1) != 0) {
             // We can't send 3rd bit flags if we don't send second.
-            codec.writeByte(flags2.getValue());
+            codec.writeByte(flags2);
         }
-        if(flags2.get(1)) {
-            codec.writeByte(flags3.getValue());
+        if(BitFlags.get(flags2, 1)) {
+            codec.writeByte(flags3);
         }
         if(type < 0) {
             // inactive block
@@ -54,20 +54,21 @@ public class Tile {
         }
 
         // Apply repeat count
-        if(repeat > 0) flags1.set(64);
-        if((repeat & 0xFF00) != 0) flags1.set(128);
+        // TODO: Once set to true, always remains on true
+        if(repeat > 0) flags1 |= 64;
+        if((repeat & 0xFF00) != 0) flags1 |= 128;
 
         // Send type
-        if(flags1.get(32)) {
+        if(BitFlags.get(flags1, 32)) {
             codec.writeShort(type);
         } else {
             codec.writeByte(type);
         }
 
         // Send extra values
-        if(flags1.get(128)) {
+        if(BitFlags.get(flags1, 128)) {
             codec.writeShort(repeat);
-        } else if(flags1.get(64)) {
+        } else if(BitFlags.get(flags1, 64)) {
             codec.writeByte(repeat);
         }
     }

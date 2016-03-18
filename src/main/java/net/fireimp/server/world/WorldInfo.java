@@ -119,7 +119,7 @@ public class WorldInfo {
      * 64 - Server Side Characters enabled
      * 128 - Plantera killed
      */
-    private BitFlags eventInfo = new BitFlags();
+    private byte eventInfo = 0;
     /**
      * Describes events that have occurred in this world
      * Bitflags:
@@ -132,7 +132,7 @@ public class WorldInfo {
      * 64 - Pumpkin moon
      * 128 - Snow moon
      */
-    private BitFlags eventInfoTwo = new BitFlags();
+    private byte eventInfoTwo = 0;
     /**
      * Unused, presumably for future content
      */
@@ -192,8 +192,8 @@ public class WorldInfo {
         codec.writeByte(caveBackstyleThree);
         codec.writeByte(caveBackstyleFour);
         codec.writeFloat(rain);
-        codec.writeByte(eventInfo.getValue());
-        codec.writeByte(eventInfoTwo.getValue());
+        codec.writeByte(eventInfo);
+        codec.writeByte(eventInfoTwo);
         codec.writeByte(eventInfoThree);
         codec.writeByte(eventInfoFour);
         codec.writeByte(invasionType);
@@ -520,11 +520,11 @@ public class WorldInfo {
         this.rain = rain;
     }
 
-    public BitFlags getEventInfo() {
+    public byte getEventInfo() {
         return eventInfo;
     }
 
-    public BitFlags getEventInfoTwo() {
+    public byte getEventInfoTwo() {
         return eventInfoTwo;
     }
 

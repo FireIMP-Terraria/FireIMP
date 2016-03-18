@@ -6,6 +6,7 @@ import net.fireimp.server.network.packets.PacketType;
 import net.fireimp.server.network.packets.login.PacketCompleteConnection;
 import net.fireimp.server.network.packets.login.PacketConnectRequest;
 import net.fireimp.server.network.packets.login.PacketContinueConnecting;
+import net.fireimp.server.network.packets.login.PacketSetStatus;
 import net.fireimp.server.network.packets.world.PacketRequestSection;
 import net.fireimp.server.network.packets.world.PacketSendSection;
 import net.fireimp.server.network.packets.world.PacketWorldInfo;
@@ -40,7 +41,7 @@ public class PacketHandler extends ChannelInboundHandlerAdapter {
 
             if(requestSection.getXSection() == -1 && requestSection.getYSection() == -1) {
                 //Banner trick:
-//                playerConnection.sendPacket(new PacketSetStatus("You are playing on a FireIMP Server!                                                                  "));
+                playerConnection.sendPacket(new PacketSetStatus("You are playing on a FireIMP Server!                                                                  "));
                 int startX = world.getWorldInfo().getSpawnX() - 100;
                 int startY = world.getWorldInfo().getSpawnY() - 75;
                 int width = 200;

@@ -8,7 +8,9 @@ public class PacketCompleteConnection extends NetworkPacket {
     public PacketCompleteConnection() {
         super(PacketType.COMPLETE_CONNECTION);
     }
-    public void encode(Codec codec) {
 
+    @Override
+    public void encode(Codec codec) {
+        System.out.println("HEY! THATS PRETTY GOOD");
     }
 }

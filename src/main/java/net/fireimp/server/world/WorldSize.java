@@ -25,7 +25,7 @@ public enum WorldSize {
         return width * height;
     }
 
-    protected Tile[] newTileSet() {
-        return new Tile[getTileCount()];
+    protected Tile[][] newTileSet() {
+        return new Tile[width][height];
     }
 }

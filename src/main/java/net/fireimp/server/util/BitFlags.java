@@ -1,53 +1,45 @@
 package net.fireimp.server.util;
 
 public class BitFlags {
-    private byte flags = (byte) 0;
-
-    public boolean setBitValue(int bit, boolean value) {
+    public static byte setBitValue(byte flags, int bit, boolean value) {
         if(value) {
-            return setBit(bit);
+            return setBit(flags, bit);
         } else {
-            return unsetBit(bit);
+            return unsetBit(flags, bit);
         }
     }
 
-    public boolean setBit(int bit) {
-        return set(1 << Maths.clamp(bit, 0, 7));
+    public static byte setBit(byte flags, int bit) {
+        return set(flags, 1 << Maths.clamp(bit, 0, 7));
     }
 
-    public boolean unsetBit(int bit) {
-        return unset(1 << Maths.clamp(bit, 0, 7));
+    public static byte unsetBit(byte flags, int bit) {
+        return unset(flags, 1 << Maths.clamp(bit, 0, 7));
     }
 
-    public boolean setMask(int mask, boolean value) {
+    public static byte setMask(byte flags, int mask, boolean value) {
         if(value) {
-            return set(mask);
+            return set(flags, mask);
         } else {
-            return unset(mask);
+            return unset(flags, mask);
         }
     }
 
-    public boolean set(int mask) {
-        byte copyOf = flags;
+    public static byte set(byte flags, int mask) {
         flags |= mask & 0xFF;
-        return flags != copyOf;
+        return flags;
     }
 
-    public boolean unset(int mask) {
-        byte copyOf = flags;
+    public static byte unset(byte flags, int mask) {
         flags &= ~(mask & 0xFF);
-        return flags != copyOf;
+        return flags;
     }
 
-    public boolean getBit(int bit) {
+    public static boolean getBit(byte flags, int bit) {
         return (flags & (1 << bit)) != 0;
     }
 
-    public boolean get(int mask) {
+    public static boolean get(byte flags, int mask) {
         return (flags & mask) != 0;
-    }
-
-    public byte getValue() {
-        return flags;
     }
 }
