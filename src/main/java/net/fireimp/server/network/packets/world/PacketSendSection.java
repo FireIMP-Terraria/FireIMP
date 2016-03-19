@@ -27,7 +27,7 @@ public class PacketSendSection extends NetworkPacket {
     }
 
     public PacketSendSection(int xStart, int yStart, int width, int height, Tile[] tiles) {
-        this(xStart, yStart, width, height, tiles, false); // compress by default
+        this(xStart, yStart, width, height, tiles, true); // compress by default
     }
 
     public PacketSendSection(int xStart, int yStart, int width, int height, Tile[] tiles, boolean compressed) {
@@ -58,7 +58,7 @@ public class PacketSendSection extends NetworkPacket {
         int successive = 0;
         for(int i = 0; i < tiles.length; i++) {
             successive++;
-            if(currentTile == null || !currentTile.equals(tiles[i])) {
+            if(currentTile == null || !currentTile.equals(tiles[i]) || true) {
                 if(currentTile != null) {
                     currentTile.encode(codec, successive-1);
                 }
@@ -66,6 +66,7 @@ public class PacketSendSection extends NetworkPacket {
                 successive = 0;
             }
         }
+        currentTile.encode(codec, successive-1);
         codec.writeShort(0); // no chests
         codec.writeShort(0); // no signs
         codec.writeShort(0); // no tile entities
@@ -73,7 +74,7 @@ public class PacketSendSection extends NetworkPacket {
         // Compression
         if(compressed) {
             byte[] uncompressed = codec.toByteArray(true);
-            Deflater deflater = new Deflater();
+            Deflater deflater = new Deflater(Deflater.DEFAULT_COMPRESSION, true);
             deflater.setInput(uncompressed);
             deflater.finish();
 
@@ -83,7 +84,6 @@ public class PacketSendSection extends NetworkPacket {
                 int length = deflater.deflate(buffer);
                 originalCodec.writeBytes(buffer, 0, length);
             }
-            System.out.println("finished");
         }
     }
 

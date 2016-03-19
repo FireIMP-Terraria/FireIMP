@@ -42,20 +42,29 @@ public class PacketHandler extends ChannelInboundHandlerAdapter {
             if(requestSection.getXSection() == -1 && requestSection.getYSection() == -1) {
                 //Banner trick:
                 playerConnection.sendPacket(new PacketSetStatus("You are playing on a FireIMP Server!                                                                  "));
-                int startX = world.getWorldInfo().getSpawnX() - 100;
-                int startY = world.getWorldInfo().getSpawnY() - 75;
-                int width = 200;
-                int height = 150;
-                Tile[] tiles = new Tile[width * height];
-                int idx = 0;
-                for(int x = 0; x < 200; x++) {
+                for(int startX = world.getWorldInfo().getSpawnX() - 100 - 200 * 2; startX < world.getWorldInfo().getSpawnX() + 100 + 200 * 2; startX += 200) {
+//                    int startX = world.getWorldInfo().getSpawnX() - 100;
+                    int startY = world.getWorldInfo().getSpawnY() - 75;
+                    int width = 200;
+                    int height = 150;
+                    Tile[] tiles = new Tile[width * height];
+                    int idx = 0;
                     for(int y = 0; y < 150; y++) {
-                        tiles[idx++] = world.getTileAt(startX + x, startY + y);
+                        for(int x = 0; x < 200; x++) {
+                            tiles[idx++] = world.getTileAt(startX + x, startY + y);
+                        }
                     }
+                    PacketSendSection section = new PacketSendSection(startX, startY, width, height, tiles);
+                    playerConnection.sendPacket(section);
                 }
-                PacketSendSection section = new PacketSendSection(startX, startY, width, height, tiles);
-                playerConnection.sendPacket(section);
-                playerConnection.sendPacket(new PacketCompleteConnection());
+                new Thread() {
+                    public void run() {
+                        try {
+                            Thread.sleep(1000L);
+                        } catch(InterruptedException e) {}
+                        playerConnection.sendPacket(new PacketCompleteConnection());
+                    }
+                }.start();
             }
         }
     }
