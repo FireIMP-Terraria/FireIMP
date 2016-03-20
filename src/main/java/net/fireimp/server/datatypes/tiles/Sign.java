@@ -17,6 +17,8 @@ public class Sign implements StreamObject {
     @Override
     public void write(Codec codec) {
         codec.writeShort(index);
+        codec.writeShort((short) location.getX());
+        codec.writeShort((short) location.getY());
         codec.writeString(text);
     }
 

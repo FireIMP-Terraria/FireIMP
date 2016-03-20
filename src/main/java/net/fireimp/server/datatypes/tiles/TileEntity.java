@@ -23,6 +23,8 @@ public class TileEntity implements StreamObject {
     public void write(Codec codec) {
         codec.writeByte(entityType.ordinal());
         codec.writeInt(id);
+        codec.writeShort((short) location.getX());
+        codec.writeShort((short) location.getY());
         if(entityType == TileEntityType.ITEM_FRAME) {
             codec.writeShort(itemType);
             codec.writeShort(itemPrefix);
