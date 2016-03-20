@@ -1,15 +1,15 @@
 package net.fireimp.server.datatypes.tiles;
 
 import net.fireimp.server.datatypes.StreamObject;
-import net.fireimp.server.datatypes.Vec2i;
+import net.fireimp.server.datatypes.Vec2;
 import net.fireimp.server.network.Codec;
 
 public class Sign implements StreamObject {
     private int index;
-    private Vec2i location;
+    private Vec2 location;
     private String text;
 
-    public Sign(Vec2i location, String text) {
+    public Sign(Vec2 location, String text) {
         this.location = location;
         this.text = text;
     }
@@ -17,8 +17,6 @@ public class Sign implements StreamObject {
     @Override
     public void write(Codec codec) {
         codec.writeShort(index);
-        codec.writeShort(location.getX());
-        codec.writeShort(location.getY());
         codec.writeString(text);
     }
 
@@ -27,11 +25,11 @@ public class Sign implements StreamObject {
 
     }
 
-    public Vec2i getLocation() {
+    public Vec2 getLocation() {
         return location;
     }
 
-    public void setLocation(Vec2i location) {
+    public void setLocation(Vec2 location) {
         this.location = location;
     }
 

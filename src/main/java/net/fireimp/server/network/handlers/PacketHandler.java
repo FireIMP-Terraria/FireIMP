@@ -1,8 +1,11 @@
 package net.fireimp.server.network.handlers;
 
 import io.netty.channel.*;
+import net.fireimp.server.datatypes.enums.EntityType;
+import net.fireimp.server.entities.Entity;
 import net.fireimp.server.network.packets.NetworkPacket;
 import net.fireimp.server.network.packets.PacketType;
+import net.fireimp.server.network.packets.entity.PacketEntityUpdate;
 import net.fireimp.server.network.packets.login.PacketCompleteConnection;
 import net.fireimp.server.network.packets.login.PacketConnectRequest;
 import net.fireimp.server.network.packets.login.PacketContinueConnecting;
@@ -63,6 +66,12 @@ public class PacketHandler extends ChannelInboundHandlerAdapter {
                             Thread.sleep(1000L);
                         } catch(InterruptedException e) {}
                         playerConnection.sendPacket(new PacketCompleteConnection());
+                        try {
+                            Thread.sleep(5000L);
+                        } catch(InterruptedException e) {}
+                        Entity testEntity = new Entity(EntityType.BLUE_SLIME);
+                        testEntity.setLocation(world.getWorldInfo().getSpawnX(), world.getWorldInfo().getSpawnY());
+                        playerConnection.sendPacket(new PacketEntityUpdate(testEntity));
                     }
                 }.start();
             }
