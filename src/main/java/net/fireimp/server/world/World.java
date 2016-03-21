@@ -4,10 +4,7 @@ import net.fireimp.server.entities.Entity;
 import net.fireimp.server.util.Maths;
 import net.fireimp.server.world.generator.WorldGenerator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class World {
     private final Tile[][] tiles;
@@ -15,12 +12,17 @@ public class World {
     private final WorldSize size;
     private final WorldInfo worldInfo;
     private final WorldGenerator generator;
+    private final int waterLayer;
+    private final int lavaLayer;
+    private Random random = new Random();
 
     public World(WorldSize size) {
         this.tiles = size.newTileSet();
         this.size = size;
         this.worldInfo = new WorldInfo("FireIMP");
         this.generator = new WorldGenerator(this);
+        this.waterLayer = (int) (getWorldInfo().getRockLayer() + (double) getSize().getWidth()) / 2;
+        this.lavaLayer = waterLayer + (50 + random.nextInt(80 - 50));
     }
 
     public WorldSize getSize() {
@@ -59,5 +61,17 @@ public class World {
         } else {
             return null;
         }
+    }
+
+    public int getWaterLayer() {
+        return waterLayer;
+    }
+
+    public int getLavaLayer() {
+        return lavaLayer;
+    }
+
+    public Random getRandom() {
+        return random;
     }
 }

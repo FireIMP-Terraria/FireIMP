@@ -34,14 +34,14 @@ public class PacketPlayerUpdate extends NetworkPacket {
     }
 
     public void decode(Codec codec) {
-        playerId = codec.readByte();
-        codec.readByte();
-        codec.readByte();
-        selectedItemId = codec.readByte();
-        location.setX(codec.readFloat());
-        location.setY(codec.readFloat());
-        codec.readFloat();
-        codec.readFloat();
+//        playerId = codec.readByte();
+//        codec.readByte();
+//        codec.readByte();
+//        selectedItemId = codec.readByte();
+//        location.setX(codec.readFloat());
+//        location.setY(codec.readFloat());
+//        codec.readFloat();
+//        codec.readFloat();
     }
 
     public int getPlayerId() {
