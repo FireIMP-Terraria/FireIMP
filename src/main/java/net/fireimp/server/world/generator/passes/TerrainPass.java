@@ -21,7 +21,7 @@ public class TerrainPass extends GenerationPass {
 
         // Generate surface level
         double worldSurface = size.getHeight() * 0.3; // 30% is surface
-        worldSurface *= nextInt(90, 110) * 0.01; // +/- 10%
+        worldSurface *= nextInt(90, 110) * 0.005; // +/- 5%
 
         // Generate rock level
         double rockLayer = worldSurface + size.getHeight() * 0.2; // 20% is rock
@@ -122,8 +122,11 @@ public class TerrainPass extends GenerationPass {
 
     private double limitSurfaceLevel(double worldSurface, int index, WorldSize size) {
         // Set overall limit to 30%
-        worldSurface = Maths.clamp(worldSurface, size.getHeight() * 0.17, size.getHeight() * 0.3);
-
+        double newSurface = Maths.clamp(worldSurface, size.getHeight() * 0.17, size.getHeight() * 0.3);
+        if(newSurface != worldSurface) {
+            modificationSize = 0;
+        }
+        worldSurface = newSurface;
         // Set near-edge limit to 25%
         if ((index < 275 || index > size.getWidth() - 275) && worldSurface > size.getHeight() * 0.25) {
             worldSurface = size.getHeight() * 0.25;
@@ -173,7 +176,7 @@ public class TerrainPass extends GenerationPass {
                 while(random.nextInt(2) == 0) {
                     ++worldSurface;
                 }
-                while(random.nextInt(6) == 0) {
+                while(random.nextInt(5) == 0) {
                     --worldSurface;
                 }
                 break;

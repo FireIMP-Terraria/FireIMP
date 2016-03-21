@@ -58,15 +58,17 @@ public class PacketSendSection extends NetworkPacket {
         int successive = 0;
         for(int i = 0; i < tiles.length; i++) {
             successive++;
-            if(currentTile == null || !currentTile.equals(tiles[i]) || true) {
+            if(currentTile == null || !currentTile.equals(tiles[i]) || successive >= Short.MAX_VALUE || true) {
                 if(currentTile != null) {
-                    currentTile.encode(codec, successive-1);
+                    currentTile.encode(codec, successive - 1);
                 }
                 currentTile = tiles[i];
                 successive = 0;
             }
         }
-        currentTile.encode(codec, successive-1);
+//        if(currentTile != null) {
+            currentTile.encode(codec, successive - 1);
+//        }
         codec.writeShort(0); // no chests
         codec.writeShort(0); // no signs
         codec.writeShort(0); // no tile entities

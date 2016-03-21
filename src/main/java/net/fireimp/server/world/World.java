@@ -20,6 +20,8 @@ public class World {
         this.tiles = size.newTileSet();
         this.size = size;
         this.worldInfo = new WorldInfo("FireIMP");
+        worldInfo.setMaxTilesX(size.getWidth());
+        worldInfo.setMaxTilesY(size.getHeight());
         this.generator = new WorldGenerator(this);
         this.waterLayer = (int) (getWorldInfo().getRockLayer() + (double) getSize().getWidth()) / 2;
         this.lavaLayer = waterLayer + (50 + random.nextInt(80 - 50));

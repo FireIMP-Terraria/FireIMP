@@ -19,7 +19,7 @@ public class TunnelPass extends GenerationPass {
             int seedY = 0;
             for (int i = 0; i < 10; ++i) {
                 while (!world.getTileAt(seedX, seedY).isActive()) {
-                    ++seedY;
+                    seedY++;
                 }
                 xVals[i] = seedX;
                 yVals[i] = seedY;
@@ -43,7 +43,6 @@ public class TunnelPass extends GenerationPass {
         //TODO: Rename types
         boolean flag1 = type == 368;
         boolean flag2 = type == 368;
-        boolean exemptFromChange = false;
         while (strength > 0.0 && (double) steps > 0.0) {
             if (startLocation.getY() < 0 && steps > 0 && type == 59) {
                 steps = 0f;
@@ -58,10 +57,10 @@ public class TunnelPass extends GenerationPass {
             xMax = Maths.clamp(xMax, 1, world.getSize().getWidth() - 1);
             yMin = Maths.clamp(yMin, 1, world.getSize().getHeight() - 1);
             yMax = Maths.clamp(yMax, 1, world.getSize().getHeight() - 1);
-            for (int xVal = xMin; xVal < xMax; xVal++) {
-                for (int yVal = yMin; yVal < yMax; yVal++) {
+            for (int xVal = xMin; xVal < xMax; ++xVal) {
+                for (int yVal = yMin; yVal < yMax; ++yVal) {
                     double xDist = Math.abs(xVal - startLocation.getX());
-                    double yDist = Math.abs(xVal - startLocation.getX());
+                    double yDist = Math.abs(yVal - startLocation.getY());
                     //TODO: Add support for wall types
 //                    if (WorldGen.mudWall && (double) j1 > Main.worldSurface && ((int) Main.tile[i1, j1 - 1].wall != 2 && j1 < Main.maxTilesY - 210 - WorldGen.genRand.Next(3)))
 //                    {
@@ -87,6 +86,7 @@ public class TunnelPass extends GenerationPass {
 
                             //Can we set this tile?
                             if (override || !world.getTileAt(xVal, yVal).isActive()) {
+                                boolean exemptFromChange = false;
 //                                Tile tile = Main.tile[i1, j1];
 //                                bool flag3 = Main.tileStone[type] && (int) tile.type != 1;
 //                                if (!TileID.Sets.CanBeClearedDuringGeneration[(int) tile.type])
@@ -104,11 +104,13 @@ public class TunnelPass extends GenerationPass {
                                         } else {
 //                                                goto label_54;
                                         }
-                                    } else if (id != 53 && id != 147) {
+                                    } else if (id != 53) {
+                                        if(id != 147) {
 //                                            goto label_54;
+                                        }
                                     } else {
                                         if (type == 40 || (yVal <= world.getWorldInfo().getSurfaceLayer() && type != 59)) {
-                                            //flags3 = true;
+                                            exemptFromChange = true;
                                         }
                                         //goto label_54;
                                     }
@@ -141,7 +143,8 @@ public class TunnelPass extends GenerationPass {
                                 }
                                 //flags3 = true
                                 if (!exemptFromChange) {
-                                    world.getTileAt(xVal, yVal).setTileId(type);
+                                    world.getTileAt(xVal, yVal).setTileId(1);
+                                    System.out.println(xVal + ", " + yVal + " = " + id);
                                 }
                             }
 //                            if(addTiles) {
