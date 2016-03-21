@@ -7,13 +7,15 @@ import net.fireimp.server.datatypes.enums.EntityType;
 public class Entity {
     public static int LAST_ENTITY_ID = 0;
 
-    private final int id;
+    private int id;
     private EntityType entityType;
     private byte targetId = -1;
     private Location location;
     private Vec2 velocity = new Vec2(0, 0);
     private int health;
     private int maxHealth;
+
+    public Entity() {}
 
     public Entity(EntityType entityType) {
         this.id = LAST_ENTITY_ID++;
@@ -49,6 +51,10 @@ public class Entity {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setTargetId(int targetId) {

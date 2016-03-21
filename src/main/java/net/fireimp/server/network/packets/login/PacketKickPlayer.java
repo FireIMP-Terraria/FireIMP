@@ -20,4 +20,7 @@ public class PacketKickPlayer extends NetworkPacket {
         codec.writeString(message);
     }
 
+    public String getMessage() {
+        return message;
+    }
 }
