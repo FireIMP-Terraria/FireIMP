@@ -3,6 +3,7 @@ package net.fireimp.server.datatypes;
 import net.fireimp.server.entities.Direction;
 
 public class Location extends Vec2 {
+    public static final Location ZERO = new Location(0, 0, Direction.NONE);
     private Direction directionX;
     private Direction directionY;
 

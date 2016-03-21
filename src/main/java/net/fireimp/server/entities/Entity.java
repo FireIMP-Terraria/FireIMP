@@ -5,7 +5,7 @@ import net.fireimp.server.datatypes.Vec2;
 import net.fireimp.server.datatypes.enums.EntityType;
 
 public class Entity {
-    public static int LAST_ENTITY_ID = 2;
+    public static int LAST_ENTITY_ID = 0;
 
     private final int id;
     private EntityType entityType;

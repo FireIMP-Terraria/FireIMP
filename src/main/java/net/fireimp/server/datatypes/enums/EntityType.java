@@ -615,4 +615,8 @@ public enum EntityType {
     public int getNetworkID() {
         return ordinal() - 65;
     }
+
+    public static EntityType fromNetworkId(short i) {
+        return values()[i + 65];
+    }
 }

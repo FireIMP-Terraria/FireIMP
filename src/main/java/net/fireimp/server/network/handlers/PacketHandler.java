@@ -3,13 +3,12 @@ package net.fireimp.server.network.handlers;
 import io.netty.channel.*;
 import net.fireimp.server.datatypes.enums.EntityType;
 import net.fireimp.server.entities.Entity;
+import net.fireimp.server.entities.Player;
 import net.fireimp.server.network.packets.NetworkPacket;
 import net.fireimp.server.network.packets.PacketType;
 import net.fireimp.server.network.packets.entity.PacketEntityUpdate;
-import net.fireimp.server.network.packets.login.PacketCompleteConnection;
-import net.fireimp.server.network.packets.login.PacketConnectRequest;
-import net.fireimp.server.network.packets.login.PacketContinueConnecting;
-import net.fireimp.server.network.packets.login.PacketSetStatus;
+import net.fireimp.server.network.packets.entity.PacketPlayerUpdate;
+import net.fireimp.server.network.packets.login.*;
 import net.fireimp.server.network.packets.world.PacketRequestSection;
 import net.fireimp.server.network.packets.world.PacketSendSection;
 import net.fireimp.server.network.packets.world.PacketWorldInfo;
@@ -33,12 +32,15 @@ public class PacketHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         NetworkPacket packet = (NetworkPacket) msg;
         System.out.println(packet.getType());
+
         if(packet.getType() == PacketType.CONNECT_REQUEST) {
             System.out.println(((PacketConnectRequest)packet).getVersion());
-            playerConnection.sendPacket(new PacketContinueConnecting(0));
+            playerConnection.sendPacket(new PacketContinueConnecting(playerConnection.getPlayerId()));
+
         } else if(packet.getType() == PacketType.CONTINUE_CONNECTING_RESPONSE) {
             System.out.println("Creating fake world :o");
             playerConnection.sendPacket(new PacketWorldInfo(world.getWorldInfo()));
+
         } else if(packet.getType() == PacketType.REQUEST_SECTION) {
             PacketRequestSection requestSection = ((PacketRequestSection)packet);
 
@@ -66,12 +68,6 @@ public class PacketHandler extends ChannelInboundHandlerAdapter {
                             Thread.sleep(1000L);
                         } catch(InterruptedException e) {}
                         playerConnection.sendPacket(new PacketCompleteConnection());
-                        try {
-                            Thread.sleep(5000L);
-                        } catch(InterruptedException e) {}
-                        Entity testEntity = new Entity(EntityType.BLUE_SLIME);
-                        testEntity.setLocation(world.getWorldInfo().getSpawnX(), world.getWorldInfo().getSpawnY());
-                        playerConnection.sendPacket(new PacketEntityUpdate(testEntity));
                     }
                 }.start();
             }

@@ -1,10 +1,17 @@
 package net.fireimp.server.world;
 
+import net.fireimp.server.entities.Entity;
 import net.fireimp.server.util.Maths;
 import net.fireimp.server.world.generator.WorldGenerator;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class World {
     private final Tile[][] tiles;
+    private Map<Integer, Entity> entities = new HashMap<>();
     private final WorldSize size;
     private final WorldInfo worldInfo;
     private final WorldGenerator generator;
@@ -40,5 +47,17 @@ public class World {
 
     public void generate() {
         generator.generate();
+    }
+
+    public void addOrUpdateEntity(int id, Entity entity) {
+        entities.put(id, entity);
+    }
+
+    public Entity getEntity(int id) {
+        if(entities.containsKey(id)) {
+            return entities.get(id);
+        } else {
+            return null;
+        }
     }
 }
