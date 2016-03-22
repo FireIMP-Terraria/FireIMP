@@ -24,4 +24,10 @@ public class Vec2 {
     public void setY(double y) {
         this.y = y;
     }
+
+    @Override
+    public String toString() {
+        return (Math.round(x*1000) / 1000) + ", " + (Math.round(y*1000) / 1000);
+    }
+
 }

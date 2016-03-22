@@ -24,4 +24,8 @@ public class Location extends Vec2 {
     public Direction getDirectionY() {
         return directionY;
     }
+
+    public void setDirectionX(Direction directionX) {
+        this.directionX = directionX;
+    }
 }

@@ -1,16 +1,21 @@
 package net.fireimp.server.network.packets.entity;
 
 import net.fireimp.server.datatypes.Location;
-import net.fireimp.server.datatypes.enums.ControlAction;
+import net.fireimp.server.datatypes.Vec2;
+import net.fireimp.server.entities.Direction;
 import net.fireimp.server.entities.Player;
 import net.fireimp.server.network.Codec;
 import net.fireimp.server.network.packets.NetworkPacket;
 import net.fireimp.server.network.packets.PacketType;
+import net.fireimp.server.util.BitFlags;
 
 public class PacketPlayerUpdate extends NetworkPacket {
     private int playerId;
-    private byte selectedItemId = 0;
+    private byte selectedItemSlot = 0;
     private Location location = Location.ZERO;
+    private Vec2 velocity = new Vec2(0, 0);
+    private byte controlsFlag = 0;
+    private byte pulleyFlag = 0;
     public PacketPlayerUpdate() {
         super(PacketType.UPDATE_PLAYER);
     }
@@ -18,7 +23,7 @@ public class PacketPlayerUpdate extends NetworkPacket {
     public PacketPlayerUpdate(Player player) {
         super(PacketType.UPDATE_PLAYER);
         this.playerId = player.getId();
-        this.selectedItemId = player.getSelectedItem();
+        this.selectedItemSlot = player.getSelectedItem();
         this.location = player.getLocation();
     }
 
@@ -26,7 +31,7 @@ public class PacketPlayerUpdate extends NetworkPacket {
         codec.writeByte(playerId);
         codec.writeByte(0);
         codec.writeByte(0);
-        codec.writeByte(selectedItemId);
+        codec.writeByte(selectedItemSlot);
         codec.writeFloat((float) location.getX());
         codec.writeFloat((float) location.getY());
         codec.writeFloat(0f);
@@ -34,14 +39,17 @@ public class PacketPlayerUpdate extends NetworkPacket {
     }
 
     public void decode(Codec codec) {
-//        playerId = codec.readByte();
-//        codec.readByte();
-//        codec.readByte();
-//        selectedItemId = codec.readByte();
-//        location.setX(codec.readFloat());
-//        location.setY(codec.readFloat());
-//        codec.readFloat();
-//        codec.readFloat();
+        playerId = codec.readByte();
+        controlsFlag = codec.readByte();
+        pulleyFlag = codec.readByte();
+        selectedItemSlot = codec.readByte();
+        location.setX(codec.readFloat());
+        location.setY(codec.readFloat());
+        location.setDirectionX(BitFlags.get(controlsFlag, 64) ? Direction.RIGHT : Direction.LEFT);
+        if(BitFlags.get(pulleyFlag, 2)) {
+            velocity.setX(codec.readFloat());
+            velocity.setX(codec.readFloat());
+        }
     }
 
     public int getPlayerId() {
@@ -50,5 +58,17 @@ public class PacketPlayerUpdate extends NetworkPacket {
 
     public void setPlayerId(byte playerId) {
         this.playerId = playerId;
+    }
+
+    public byte getControlsFlag() {
+        return controlsFlag;
+    }
+
+    public Vec2 getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Vec2 velocity) {
+        this.velocity = velocity;
     }
 }
