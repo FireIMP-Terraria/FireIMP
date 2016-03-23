@@ -144,7 +144,6 @@ public class TunnelPass extends GenerationPass {
                                 //flags3 = true
                                 if (!exemptFromChange) {
                                     world.getTileAt(xVal, yVal).setTileId(1);
-                                    System.out.println(xVal + ", " + yVal + " = " + id);
                                 }
                             }
 //                            if(addTiles) {

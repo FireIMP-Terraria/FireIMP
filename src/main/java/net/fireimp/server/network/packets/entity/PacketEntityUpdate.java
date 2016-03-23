@@ -32,14 +32,27 @@ public class PacketEntityUpdate extends NetworkPacket {
     @Override
     public void decode(Codec codec) {
         Entity entity = new Entity();
-        entity.setId(codec.readShort());
+        entity.setEntityType(EntityType.fromNetworkId(codec.readShort()));
         entity.setLocation(codec.readFloat(), codec.readFloat());
         entity.setVelocity(codec.readFloat(), codec.readFloat());
         entity.setTargetId(codec.readByte());
         byte flags = codec.readByte();
+        codec.readFloat();
+        entity.setId(codec.readShort());
         System.out.println("Found flags: " + flags);
-        entity.setEntityType(EntityType.fromNetworkId(codec.readShort()));
-        entity.setHealth(codec.readInt());
+//        entity.setHealth(codec.readByte());
+        if(BitFlags.get(flags, 128)) {
+            entity.setMaxHealth(entity.getHealth());
+        } else {
+            byte lifeBytes = codec.readByte();
+            if(lifeBytes == 2) {
+                entity.setHealth(codec.readShort());
+            } else if(lifeBytes == 4) {
+                entity.setHealth(codec.readInt());
+            } else {
+                entity.setHealth(codec.readByte());
+            }
+        }
         this.entity = entity;
     }
     @Override
@@ -54,7 +67,7 @@ public class PacketEntityUpdate extends NetworkPacket {
     }
     @Override
     public void encode(Codec codec) {
-        codec.writeShort(entity.getId());
+        codec.writeShort(entity.getEntityType().getNetworkID());
         codec.writeFloat((float) entity.getLocation().getX());
         codec.writeFloat((float) entity.getLocation().getY());
         codec.writeFloat((float) entity.getVelocity().getX());
@@ -67,21 +80,25 @@ public class PacketEntityUpdate extends NetworkPacket {
         if(entity.getLocation().getDirectionY() == Direction.UP) {
             flag = BitFlags.setBit(flag, 2);
         }
-        flag = BitFlags.setBit(flag, 4);
-        flag = BitFlags.setBit(flag, 8);
-        flag = BitFlags.setBit(flag, 16);
-        flag = BitFlags.setBit(flag, 32);
+        flag = BitFlags.setBit(flag, 4); // AI[0]
+//        flag = BitFlags.setBit(flag, 8);
+//        flag = BitFlags.setBit(flag, 16);
+//        flag = BitFlags.setBit(flag, 32);
         if(entity.getHealth() == entity.getMaxHealth()) {
             flag = BitFlags.setBit(flag, 128);
         }
         codec.writeByte(flag);
-        codec.writeShort(entity.getEntityType().getNetworkID());
+        codec.writeShort(entity.getId());
+        codec.writeFloat(0.5f);
         if(entity.getHealth() != entity.getMaxHealth()) {
             if (entity.getHealth() > Short.MAX_VALUE) {
+                codec.writeByte(4);
                 codec.writeInt(entity.getHealth());
             } else if (entity.getHealth() > Byte.MAX_VALUE) {
+                codec.writeByte(2);
                 codec.writeShort(entity.getHealth());
             } else {
+                codec.writeByte(1);
                 codec.writeByte(entity.getHealth());
             }
         }

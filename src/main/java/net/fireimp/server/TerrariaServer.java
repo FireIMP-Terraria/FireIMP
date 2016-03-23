@@ -8,7 +8,7 @@ public class TerrariaServer {
     public static World world;
 
     public static void main(String[] args) {
-//        new RawPacketSystem().run();
+        new RawPacketSystem().run();
         world = new World(WorldSize.SMALL);
         world.generate();
 

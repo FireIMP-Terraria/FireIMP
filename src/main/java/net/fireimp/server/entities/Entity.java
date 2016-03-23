@@ -5,11 +5,11 @@ import net.fireimp.server.datatypes.Vec2;
 import net.fireimp.server.datatypes.enums.EntityType;
 
 public class Entity {
-    public static int LAST_ENTITY_ID = 0;
+    public static int LAST_ENTITY_ID = 55;
 
     private int id;
     private EntityType entityType;
-    private byte targetId = -1;
+    private byte targetId = 0;
     private Location location;
     private Vec2 velocity = new Vec2(0, 0);
     private int health;
@@ -21,7 +21,7 @@ public class Entity {
         this.id = LAST_ENTITY_ID++;
         this.entityType = entityType;
         setMaxHealth(200);
-        setHealth(maxHealth);
+        setHealth(maxHealth - 50);
     }
 
     public EntityType getEntityType() {
