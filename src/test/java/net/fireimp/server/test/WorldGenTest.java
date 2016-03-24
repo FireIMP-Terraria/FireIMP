@@ -11,7 +11,7 @@ public class WorldGenTest {
     public void testWorldGen() {
         // TODO: Make this useful.
         // stuff like: check if there are enough trees, dungeon, crimson/corruption, chests ect.
-        World world = new World(WorldSize.MEDIUM);
+        World world = new World(WorldSize.SMALL);
         world.generate(); // Generate world in RAM
         Assert.assertTrue("Top block isn't air!", world.getTileAt(0, 0).getTypeId() == -1);
     }
