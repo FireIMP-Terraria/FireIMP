@@ -1,10 +1,14 @@
 package net.fireimp.server.network.handlers;
 
 import io.netty.channel.*;
+import net.fireimp.server.datatypes.chat.MessageSection;
+import net.fireimp.server.datatypes.enums.Achievement;
 import net.fireimp.server.datatypes.enums.EntityType;
+import net.fireimp.server.datatypes.enums.ItemPrefix;
 import net.fireimp.server.entities.Entity;
 import net.fireimp.server.entities.Player;
 import net.fireimp.server.network.packets.NetworkPacket;
+import net.fireimp.server.network.packets.PacketChatMessage;
 import net.fireimp.server.network.packets.PacketType;
 import net.fireimp.server.network.packets.entity.PacketEntityUpdate;
 import net.fireimp.server.network.packets.entity.PacketPlayerUpdate;
@@ -17,6 +21,7 @@ import net.fireimp.server.world.Tile;
 import net.fireimp.server.world.World;
 import net.fireimp.server.world.WorldSize;
 
+import java.awt.*;
 import java.net.InetSocketAddress;
 
 public class PacketHandler extends ChannelInboundHandlerAdapter {
@@ -48,9 +53,9 @@ public class PacketHandler extends ChannelInboundHandlerAdapter {
                 //Banner trick:
                 playerConnection.sendPacket(new PacketSetStatus("You are playing on a FireIMP Server!                                                                  "));
                 for(int startX = world.getWorldInfo().getSpawnX() - 100 - 200 * 2; startX < world.getWorldInfo().getSpawnX() + 100 + 200 * 2; startX += 200) {
-                    for (int startY = world.getWorldInfo().getSpawnY() - 75 - 150 * 2; startY < world.getWorldInfo().getSpawnY() + 75 + 140 * 2; startY += 150) {
+//                    for (int startY = world.getWorldInfo().getSpawnY() - 75 - 150 * 2; startY < world.getWorldInfo().getSpawnY() + 75 + 140 * 2; startY += 150) {
 //                    int startX = world.getWorldInfo().getSpawnX() - 100;
-//                    int startY = world.getWorldInfo().getSpawnY() - 75;
+                    int startY = world.getWorldInfo().getSpawnY() - 75;
                         int width = 200;
                         int height = 150;
                         Tile[] tiles = new Tile[width * height];
@@ -71,10 +76,13 @@ public class PacketHandler extends ChannelInboundHandlerAdapter {
                             } catch (InterruptedException e) {
                             }
                             playerConnection.sendPacket(new PacketCompleteConnection());
+
+                            MessageSection item = new MessageSection().setItem(2701);
+                            playerConnection.sendPacket(new PacketChatMessage(item.append(new MessageSection("Welcome to FireIMP!")).append(item), Color.RED));
                         }
                     }.start();
                 }
-        }
+//        }
     }
 
     @Override
