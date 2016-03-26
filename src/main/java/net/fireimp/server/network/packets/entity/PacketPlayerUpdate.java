@@ -71,4 +71,8 @@ public class PacketPlayerUpdate extends NetworkPacket {
     public void setVelocity(Vec2 velocity) {
         this.velocity = velocity;
     }
+
+    public Location getLocation() {
+        return location;
+    }
 }
