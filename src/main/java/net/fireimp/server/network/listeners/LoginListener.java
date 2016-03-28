@@ -1,6 +1,10 @@
 package net.fireimp.server.network.listeners;
 
 import com.google.common.collect.Lists;
+import net.fireimp.server.TerrariaServer;
+import net.fireimp.server.Threads;
+import net.fireimp.server.entities.Player;
+import net.fireimp.server.network.packets.login.PacketCompleteConnection;
 import net.fireimp.server.world.World;
 import net.fireimp.server.network.packets.login.PacketConnectRequest;
 import net.fireimp.server.network.packets.login.PacketContinueConnecting;
@@ -39,6 +43,23 @@ public class LoginListener implements PacketListener {
     @PacketIn
     public void onRequestSection(PacketRequestSection packet) {
         // TODO: Send section
-        System.out.println("Ready to send sections!");
+        final Player player = new Player(connection);
+        TerrariaServer.getInstance().getWorld().addOrUpdatePlayer(player.getId(), player);
+        if(packet.getXSection() == -1 && packet.getYSection() == -1) {
+            player.getNetworkHandle().setPhase(NetPhase.PLAYING);
+            Threads.asyncService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    connection.sendPacket(new PacketCompleteConnection());
+                }
+            });
+        } else {
+            player.updateTileMap();
+        }
     }
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import net.fireimp.server.network.listeners.LoginListener;
 import net.fireimp.server.network.listeners.PacketIn;
 import net.fireimp.server.network.listeners.PacketListener;
+import net.fireimp.server.network.listeners.PlayerListener;
 import net.fireimp.server.network.packets.NetworkPacket;
 import net.fireimp.server.network.packets.PacketChatMessage;
 import net.fireimp.server.network.packets.PacketType;
@@ -27,6 +28,7 @@ public class PacketHandler extends ChannelInboundHandlerAdapter {
 
         // Register listeners
         registerListener(new LoginListener(playerConnection, world));
+        registerListener(new PlayerListener());
     }
 
     public void registerListener(PacketListener listener) {

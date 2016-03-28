@@ -1,7 +1,7 @@
 package net.fireimp.server.entities;
 
 import net.fireimp.server.datatypes.Location;
-import net.fireimp.server.datatypes.Vec2;
+import net.fireimp.server.util.Vec2;
 import net.fireimp.server.datatypes.enums.EntityType;
 
 public class Entity {
@@ -38,6 +38,10 @@ public class Entity {
 
     public void setLocation(double x, double y) {
         this.location = new Location(x, y, Direction.RIGHT);
+    }
+
+    public void setLocation(Vec2 location) {
+        this.location = new Location(location.getX(), location.getY(), Direction.RIGHT);
     }
 
 

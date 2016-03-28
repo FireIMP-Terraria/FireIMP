@@ -1,7 +1,7 @@
 package net.fireimp.server.datatypes.tiles;
 
 import net.fireimp.server.datatypes.StreamObject;
-import net.fireimp.server.datatypes.Vec2;
+import net.fireimp.server.util.Vec2;
 import net.fireimp.server.network.Codec;
 
 public class Sign implements StreamObject {

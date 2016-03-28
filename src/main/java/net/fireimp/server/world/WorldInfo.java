@@ -1,7 +1,7 @@
 package net.fireimp.server.world;
 
+import net.fireimp.server.util.Vec2;
 import net.fireimp.server.network.Codec;
-import net.fireimp.server.util.BitFlags;
 
 /**
  * Stores metadata about a world instance
@@ -28,13 +28,10 @@ public class WorldInfo {
     private int maxTilesX =  6400;
     private int maxTilesY = 1800;
     /**
-     * The x spawn location in tiles
+     * The spawn location in tiles
      */
-    private int spawnX = 3200; //Example: 3200
-    /**
-     * The y spawn location in tiles
-     */
-    private int spawnY = 320; //Example: 320
+    private Vec2 spawnLocation = new Vec2(3200, 320);
+
     /**
      * The layer the world defines as "surface". This means
      * surface mobs will spawn and a surface background will be used
@@ -157,8 +154,8 @@ public class WorldInfo {
         codec.writeByte(moonPhase);
         codec.writeShort(maxTilesX);
         codec.writeShort(maxTilesY);
-        codec.writeShort(spawnX);
-        codec.writeShort(spawnY);
+        codec.writeShort((int) spawnLocation.getX());
+        codec.writeShort((int) spawnLocation.getY());
         codec.writeShort(surfaceLayer);
         codec.writeShort(rockLayer);
         codec.writeInt(worldId);
@@ -241,19 +238,19 @@ public class WorldInfo {
     }
 
     public int getSpawnX() {
-        return spawnX;
+        return (int) spawnLocation.getX();
     }
 
     public void setSpawnX(int spawnX) {
-        this.spawnX = spawnX;
+        this.spawnLocation.setX(spawnX);
     }
 
     public int getSpawnY() {
-        return spawnY;
+        return (int) spawnLocation.getY();
     }
 
     public void setSpawnY(int spawnY) {
-        this.spawnY = spawnY;
+        this.spawnLocation.setY(spawnY);
     }
 
     public int getSurfaceLayer() {
@@ -558,5 +555,9 @@ public class WorldInfo {
 
     public void setLobbyId(long lobbyId) {
         this.lobbyId = lobbyId;
+    }
+
+    public Vec2 getSpawnLocation() {
+        return spawnLocation;
     }
 }

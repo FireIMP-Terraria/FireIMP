@@ -1,6 +1,6 @@
 package net.fireimp.server.world.generator.passes;
 
-import net.fireimp.server.datatypes.Vec2;
+import net.fireimp.server.util.Vec2;
 import net.fireimp.server.datatypes.enums.Liquid;
 import net.fireimp.server.util.Maths;
 import net.fireimp.server.world.World;

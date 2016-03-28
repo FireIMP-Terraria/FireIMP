@@ -57,6 +57,6 @@ public class NetManager extends ChannelInitializer<SocketChannel> {
         final PlayerConnection connection = new PlayerConnection();
         channel.pipeline().addLast("encoder", new PacketEncoder())
                 .addLast("decoder", new PacketDecoder())
-                .addLast("packet_handler", new PacketHandler(connection, TerrariaServer.world));
+                .addLast("packet_handler", new PacketHandler(connection, TerrariaServer.getInstance().getWorld()));
     }
 }

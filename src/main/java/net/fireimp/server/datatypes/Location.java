@@ -1,6 +1,7 @@
 package net.fireimp.server.datatypes;
 
 import net.fireimp.server.entities.Direction;
+import net.fireimp.server.util.Vec2;
 
 public class Location extends Vec2 {
     public static final Location ZERO = new Location(0, 0, Direction.NONE);

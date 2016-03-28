@@ -1,7 +1,7 @@
 package net.fireimp.server.network.packets.entity;
 
 import net.fireimp.server.datatypes.Location;
-import net.fireimp.server.datatypes.Vec2;
+import net.fireimp.server.util.Vec2;
 import net.fireimp.server.entities.Direction;
 import net.fireimp.server.entities.Player;
 import net.fireimp.server.network.Codec;
