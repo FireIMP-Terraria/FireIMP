@@ -74,12 +74,12 @@ public class PacketEntityUpdate extends NetworkPacket {
         codec.writeFloat((float) entity.getVelocity().getY());
         codec.writeByte(entity.getTargetId());
         byte flag = 0;
-//        if(entity.getLocation().getDirectionX() == Direction.RIGHT) {
-//            flag = BitFlags.setBit(flag, 1);
-//        }
-//        if(entity.getLocation().getDirectionY() == Direction.UP) {
-//            flag = BitFlags.setBit(flag, 2);
-//        }
+        if(entity.getLocation().getDirectionX() == Direction.RIGHT) {
+            flag = BitFlags.setBit(flag, 1);
+        }
+        if(entity.getLocation().getDirectionY() == Direction.UP) {
+            flag = BitFlags.setBit(flag, 2);
+        }
 //        flag = BitFlags.setBit(flag, 4); // AI[0]
 //        flag = BitFlags.setBit(flag, 8);
 //        flag = BitFlags.setBit(flag, 16);
@@ -90,11 +90,11 @@ public class PacketEntityUpdate extends NetworkPacket {
         codec.writeByte(flag);
         codec.writeShort(entity.getEntityType().getNetworkID());
 //        codec.writeFloat(0.5f);
-        if(entity.getHealth() == entity.getMaxHealth()) {
-            if (entity.getHealth() > Short.MAX_VALUE) {
+        if(entity.getHealth() != entity.getMaxHealth()) {
+            if (entity.getMaxHealth() > Short.MAX_VALUE) {
                 codec.writeByte(4);
                 codec.writeInt(entity.getHealth());
-            } else if (entity.getHealth() > Byte.MAX_VALUE) {
+            } else if (entity.getMaxHealth() > Byte.MAX_VALUE) {
                 codec.writeByte(2);
                 codec.writeShort(entity.getHealth());
             } else {
