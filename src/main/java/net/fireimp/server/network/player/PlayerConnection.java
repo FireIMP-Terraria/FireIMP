@@ -4,12 +4,16 @@ import io.netty.channel.ChannelHandlerContext;
 import net.fireimp.server.network.packets.NetworkPacket;
 
 public class PlayerConnection {
+    private static int LAST_PLAYER_ID = 0;
+
+    private final int playerId;
     private ChannelHandlerContext ctx;
-    public static int LAST_PLAYER_ID = 0;
-    private int playerId;
+    private NetPhase phase;
+
     public PlayerConnection() {
         playerId = LAST_PLAYER_ID++;
     }
+
     public void setChannelHandlerContext(ChannelHandlerContext ctx) {
         this.ctx = ctx;
     }
@@ -31,5 +35,13 @@ public class PlayerConnection {
 
     public int getPlayerId() {
         return playerId;
+    }
+
+    public NetPhase getPhase() {
+        return phase;
+    }
+
+    public void setPhase(NetPhase phase) {
+        this.phase = phase;
     }
 }
