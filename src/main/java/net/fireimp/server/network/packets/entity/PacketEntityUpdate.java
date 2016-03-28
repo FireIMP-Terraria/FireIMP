@@ -67,20 +67,20 @@ public class PacketEntityUpdate extends NetworkPacket {
     }
     @Override
     public void encode(Codec codec) {
-        codec.writeShort(entity.getEntityType().getNetworkID());
+        codec.writeShort(entity.getId());
         codec.writeFloat((float) entity.getLocation().getX());
         codec.writeFloat((float) entity.getLocation().getY());
         codec.writeFloat((float) entity.getVelocity().getX());
         codec.writeFloat((float) entity.getVelocity().getY());
         codec.writeByte(entity.getTargetId());
         byte flag = 0;
-        if(entity.getLocation().getDirectionX() == Direction.RIGHT) {
-            flag = BitFlags.setBit(flag, 1);
-        }
-        if(entity.getLocation().getDirectionY() == Direction.UP) {
-            flag = BitFlags.setBit(flag, 2);
-        }
-        flag = BitFlags.setBit(flag, 4); // AI[0]
+//        if(entity.getLocation().getDirectionX() == Direction.RIGHT) {
+//            flag = BitFlags.setBit(flag, 1);
+//        }
+//        if(entity.getLocation().getDirectionY() == Direction.UP) {
+//            flag = BitFlags.setBit(flag, 2);
+//        }
+//        flag = BitFlags.setBit(flag, 4); // AI[0]
 //        flag = BitFlags.setBit(flag, 8);
 //        flag = BitFlags.setBit(flag, 16);
 //        flag = BitFlags.setBit(flag, 32);
@@ -88,9 +88,9 @@ public class PacketEntityUpdate extends NetworkPacket {
             flag = BitFlags.setBit(flag, 128);
         }
         codec.writeByte(flag);
-        codec.writeShort(entity.getId());
-        codec.writeFloat(0.5f);
-        if(entity.getHealth() != entity.getMaxHealth()) {
+        codec.writeShort(entity.getEntityType().getNetworkID());
+//        codec.writeFloat(0.5f);
+        if(entity.getHealth() == entity.getMaxHealth()) {
             if (entity.getHealth() > Short.MAX_VALUE) {
                 codec.writeByte(4);
                 codec.writeInt(entity.getHealth());

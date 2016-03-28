@@ -2,6 +2,7 @@ package net.fireimp.server.network;
 
 import com.google.common.base.Charsets;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 
 public class Codec {
     private final ByteBuf buf;
@@ -23,7 +24,9 @@ public class Codec {
     }
 
     public float readFloat() {
-        return buf.readFloat();
+        int intVal = Float.floatToIntBits(buf.readFloat());
+        intVal = ByteBufUtil.swapInt(intVal);
+        return Float.intBitsToFloat(intVal);
     }
 
     public short readShort() {
@@ -87,7 +90,9 @@ public class Codec {
     }
 
     public void writeFloat(float value) {
-        buf.writeFloat(value);
+        int intVal = Float.floatToIntBits(value);
+        intVal = ByteBufUtil.swapInt(intVal);
+        buf.writeFloat(Float.intBitsToFloat(intVal));
     }
 
     public void writeShort(int value) {

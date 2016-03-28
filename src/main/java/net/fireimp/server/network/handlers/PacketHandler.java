@@ -8,6 +8,7 @@ import net.fireimp.server.network.listeners.LoginListener;
 import net.fireimp.server.network.listeners.PacketIn;
 import net.fireimp.server.network.listeners.PacketListener;
 import net.fireimp.server.network.packets.NetworkPacket;
+import net.fireimp.server.network.packets.PacketChatMessage;
 import net.fireimp.server.network.packets.PacketType;
 import net.fireimp.server.network.player.NetPhase;
 import net.fireimp.server.network.player.PlayerConnection;
