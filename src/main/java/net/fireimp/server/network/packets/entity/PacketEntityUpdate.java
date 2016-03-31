@@ -80,15 +80,28 @@ public class PacketEntityUpdate extends NetworkPacket {
         if(entity.getLocation().getDirectionY() == Direction.UP) {
             flag = BitFlags.setBit(flag, 2);
         }
-//        flag = BitFlags.setBit(flag, 4); // AI[0]
-//        flag = BitFlags.setBit(flag, 8);
-//        flag = BitFlags.setBit(flag, 16);
-//        flag = BitFlags.setBit(flag, 32);
+       /* if(entity.getAiFloats()[0] != 0) {
+            flag = BitFlags.setBit(flag, 4);
+        }
+        if(entity.getAiFloats()[1] != 0) {
+            flag = BitFlags.set(flag, 8);
+        }
+        if(entity.getAiFloats()[2] != 0) {
+            flag = BitFlags.set(flag, 16);
+        }
+        if(entity.getAiFloats()[3] != 0) {
+            flag = BitFlags.setBit(flag, 32);
+        }*/
         if(entity.getHealth() == entity.getMaxHealth()) {
             flag = BitFlags.setBit(flag, 128);
         }
         codec.writeByte(flag);
         codec.writeShort(entity.getEntityType().getNetworkID());
+        for(int i = 0; i < 4; i++) {
+            if(entity.getAiFloats()[i] != 0) {
+                codec.writeFloat(entity.getAiFloats()[i]);
+            }
+        }
 //        codec.writeFloat(0.5f);
         if(entity.getHealth() != entity.getMaxHealth()) {
             if (entity.getMaxHealth() > Short.MAX_VALUE) {

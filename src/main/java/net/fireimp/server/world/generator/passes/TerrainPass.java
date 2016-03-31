@@ -1,6 +1,7 @@
 package net.fireimp.server.world.generator.passes;
 
 import net.fireimp.server.util.Maths;
+import net.fireimp.server.util.Vec2;
 import net.fireimp.server.world.World;
 import net.fireimp.server.world.WorldInfo;
 import net.fireimp.server.world.WorldSize;
@@ -99,8 +100,7 @@ public class TerrainPass extends GenerationPass {
         info.setMaxTilesY(size.getHeight());
         info.setSurfaceLayer((int) (worldSurfaceHigh + 25.0));
         info.setRockLayer((int) (info.getSurfaceLayer() + ((int) (rockLayerHigh - worldSurface) / 6.0) * 6));
-        info.setSpawnX(spawnX);
-        info.setSpawnY(spawnY);
+        info.setSpawnLocation(new Vec2(spawnX, spawnY));
         System.out.println(spawnX + " " + spawnY);
         // TODO: Set water level
     }

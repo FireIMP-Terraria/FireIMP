@@ -28,7 +28,7 @@ public class Player extends Entity {
         World world = TerrariaServer.getInstance().getWorld();
         Vec2 location = getLocation().divide(16);
         BoundingBox tilesToLoad = new BoundingBox(new Vec2(location.getX(), location.getY()), new Vec2(location.getX(), location.getY()));
-        tilesToLoad = tilesToLoad.expandOut(200, 75); //This should equate to a bit more than 1920 x 1080
+        tilesToLoad = tilesToLoad.expandOut(200, 75);
         List<Tile> tiles = new ArrayList<>();
         Vec2 min = tilesToLoad.min();//.divide(16);
         Vec2 max = tilesToLoad.max();//.divide(16);

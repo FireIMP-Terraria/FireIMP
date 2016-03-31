@@ -619,4 +619,14 @@ public enum EntityType {
     public static EntityType fromNetworkId(short i) {
         return values()[i + 65];
     }
+
+    public boolean isHumanNPC() {
+        return this == GUIDE || this == MERCHANT || this == NURSE
+                || this == DEMOLITIONIST || this == DYE_TRADER || this == DRYAD
+                || this == ARMS_DEALER || this == STYLIST || this == PAINTER || this == ANGLER
+                || this == GOBLIN_TINKERER || this == WITCH_DOCTOR || this == CLOTHIER || this == MECHANIC
+                || this == PARTY_GIRL || this == PIRATE || this == TRUFFLE || this == WIZARD || this == STEAMPUNKER
+                || this == CYBORG || this == SANTA_CLAUS || this == TAX_COLLECTOR || this == TRAVELLING_MERCHANT || this == OLD_MAN
+                || this == SKELETON_MERCHANT;
+    }
 }

@@ -1,5 +1,7 @@
 package net.fireimp.server.util;
 
+import net.fireimp.server.datatypes.Location;
+
 public class Vec2 {
     public static final Vec2 ZERO = new Vec2(0, 0);
     private double x;
@@ -37,5 +39,11 @@ public class Vec2 {
 
     public Vec2 multiply(double i) {
         return new Vec2(getX() * i, getY() * i);
+    }
+
+    public double distanceSquared(Vec2 vec2) {
+        double xDist = getX() - vec2.getX();
+        double yDist = getY() - vec2.getY();
+        return (xDist * xDist) + (yDist * yDist);
     }
 }

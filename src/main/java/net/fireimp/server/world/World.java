@@ -1,5 +1,7 @@
 package net.fireimp.server.world;
 
+import com.google.common.collect.Lists;
+import net.fireimp.server.Threads;
 import net.fireimp.server.entities.Entity;
 import net.fireimp.server.entities.Player;
 import net.fireimp.server.util.Maths;
@@ -17,6 +19,8 @@ public class World {
     private final int waterLayer;
     private final int lavaLayer;
     private Random random = new Random();
+    private long worldTick = 0L;
+    private long entityTick = 0L;
 
     public World(WorldSize size) {
         this.tiles = size.newTileSet();
@@ -27,6 +31,19 @@ public class World {
         this.generator = new WorldGenerator(this);
         this.waterLayer = (int) (getWorldInfo().getRockLayer() + (double) getSize().getWidth()) / 2;
         this.lavaLayer = waterLayer + (50 + random.nextInt(80 - 50));
+        Threads.worldService.submit(new Runnable() {
+            @Override
+            public void run() {
+                while(true) {
+                    tick();
+                    try {
+                        Thread.sleep(17); //~ 1/60th of a second
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     public WorldSize getSize() {
@@ -56,6 +73,9 @@ public class World {
     }
 
     public void addOrUpdateEntity(int id, Entity entity) {
+        if(id == -1) {
+            id = entity.getId();
+        }
         entities.put(id, entity);
     }
 
@@ -66,6 +86,11 @@ public class World {
             return null;
         }
     }
+
+    public List<Entity> getEntities() {
+        return Lists.newArrayList(entities.values());
+    }
+
     public void addOrUpdatePlayer(int id, Player player) {
         players.put(id, player);
     }
@@ -78,6 +103,19 @@ public class World {
         }
     }
 
+    private void tick() {
+        Threads.entityService.submit(new Runnable() {
+            @Override
+            public void run() {
+                for(Entity entity : getEntities()) {
+                    entity.update((int) entityTick);
+                }
+                entityTick++;
+            }
+        });
+        worldTick++;
+    }
+
     public int getWaterLayer() {
         return waterLayer;
     }
@@ -88,5 +126,9 @@ public class World {
 
     public Random getRandom() {
         return random;
+    }
+
+    public List<Player> getPlayers() {
+        return Lists.newArrayList(players.values());
     }
 }
